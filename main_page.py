@@ -143,7 +143,7 @@ def pricingModelSelector(monthly_txn, aov,txn_nature):
 
 # ---Logo & Heading Section---
 #st.markdown("<p style='text-align: center;'><img src='/Users/shubhamsd4/Documents/Work/Aasaan Price Calculator/Images/aasaan_logo.png'></p>", unsafe_allow_html=True)
-st.markdown("<h1 style='text-align:center;'>Aasaan Pricing Calculator</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align:center;'>Aasaan Checkout Price Calculator</h1>", unsafe_allow_html=True)
 
 
 
