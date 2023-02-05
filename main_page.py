@@ -85,7 +85,7 @@ class CompetitorPriceCalculation:
         if self.txn*self.AOV > shopflo_slab1 and self.txn*self.AOV <= shopflo_slab2:
             return round(installation_fee + 12*(shopflo_slab1*self.AOV*shopflo_slab1_txn_perc*0.01 + self.txn - shopflo_slab1)*self.AOV*shopflo_slab2_txn_perc*0.01 + 8*monthly_fee,2)
         if self.txn*self.AOV > shopflo_slab2:
-            return round(installation_fee + 12*(shopflo_slab1*self.AOV*shopflo_slab1_txn_perc*0.01 + shopflo_slab2*self.AOV*shopflo_slab2_txn_perc*0.01 + (self.txn - shopflo_slab2)*self.AOV*shopflo_slab3_txn_perc*0.01 + 8*monthly_fee), 2) 
+            return round(installation_fee + 12*(shopflo_slab1*self.AOV*shopflo_slab1_txn_perc*0.01 + (shopflo_slab2 - shopflo_slab1)*self.AOV*shopflo_slab2_txn_perc*0.01 + (self.txn - shopflo_slab2)*self.AOV*shopflo_slab3_txn_perc*0.01 + 8*monthly_fee), 2) 
 
 
 #---Function to get comp. dictionary---
