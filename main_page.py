@@ -63,7 +63,7 @@ class CompetitorPriceCalculation:
     #Nimbl Price Calculation
     def nimbl_price(self):
         nimbl_txn_perc = 2.1
-        return rounnd(12*self.txn*self.AOV*nimbl_txn_perc*0.01, 2)
+        return round(12*self.txn*self.AOV*nimbl_txn_perc*0.01, 2)
 
     #GoKwik Price Calculation
     def gokwik_price(self):
