@@ -221,7 +221,7 @@ with st.container():
             no_of_slabs = st.text_input("Enter number of slabs")
             st.button("Get Slabs")
         else:
-            st.write("No-Tiered")
+            st.write("Non-Tiered")
             no_of_slabs = 1
         aov_bprice = st.text_input("Avg. Order Value (in Rs.)", key="AOV base price")
         max_txn = []
