@@ -153,9 +153,9 @@ with st.container():
     st.write("Aasaan Checkout Price Calculator is a tool for the Sales Executives (that is you :smiley:) so that you can show our prospective merchants about the price they'd have to pay for the current revenue they're generating and also compare it with Aasaan's competitors to show them we are way better in terms of pricing as well apart from the features :sunglasses:. All you have to do is:")
     st.markdown(
         """
-        1. Ask our prospective merchants what their Avg. Order Value and their monthly transactions.
-        2. Choose the pricing model and input the pricing details according to the guidelines.
-        3. Choose the competitors you want to compare against
+        1. Choose the competitors you want to compare against
+        2. Ask our prospective merchants what their Avg. Order Value, their monthly transactions and nature of their transactions
+        3. Input the pricing details of the pricing model suggested
         """)
 
 #--Choose Competitor ---
