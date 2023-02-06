@@ -74,18 +74,19 @@ class CompetitorPriceCalculation:
     #Shopflo Price Calculation
     def shopflo_price(self):
         installation_fee = 10000
-        monthly_fee = 8223
+        monthly_fee_slab2 = 8223
+        monthly_fee_slab3 = 8223*2
         shopflo_slab1_txn_perc = 2.5
         shopflo_slab2_txn_perc = 1
         shopflo_slab3_txn_perc = 0.5
         shopflo_slab1 = 500000/self.AOV
-        shopflo_slab2 = 6000000/self.AOV
+        shopflo_slab2 = 1600000/self.AOV
         if self.txn <= shopflo_slab1:
             return installation_fee + 8*self.txn*self.AOV*shopflo_slab1_txn_perc*0.01
         if self.txn > shopflo_slab1 and self.txn <= shopflo_slab2:
-            return installation_fee + 8*(shopflo_slab1*self.AOV*shopflo_slab1_txn_perc*0.01 + (self.txn - shopflo_slab1)*self.AOV*shopflo_slab2_txn_perc*0.01) + 8*monthly_fee
+            return installation_fee + 8*(shopflo_slab1*self.AOV*shopflo_slab1_txn_perc*0.01 + (self.txn - shopflo_slab1)*self.AOV*shopflo_slab2_txn_perc*0.01) + 8*monthly_fee_slab2
         if self.txn > shopflo_slab2:
-            return installation_fee + 8*(shopflo_slab1*self.AOV*shopflo_slab1_txn_perc*0.01 + (shopflo_slab2 - shopflo_slab1)*self.AOV*shopflo_slab2_txn_perc*0.01 + (self.txn - shopflo_slab2)*self.AOV*shopflo_slab3_txn_perc*0.01) + 8*monthly_fee
+            return installation_fee + 8*(shopflo_slab1*self.AOV*shopflo_slab1_txn_perc*0.01 + (shopflo_slab2 - shopflo_slab1)*self.AOV*shopflo_slab2_txn_perc*0.01 + (self.txn - shopflo_slab2)*self.AOV*shopflo_slab3_txn_perc*0.01) + 8*monthly_fee_slab3
 
 
 #---Function to get comp. dictionary---
