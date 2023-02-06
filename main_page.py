@@ -18,9 +18,10 @@ def aasaan_prepaid(plan):
 
 #Postpaid Aasaan Base Percentage Price Calculation
 class AasaanPostPaidBasePriceCalculation:
-    def __init__(self,txn_details,base_details,no_of_slabs):
+    def __init__(self,txn_details,base_details, base_price_comp, no_of_slabs):
        self.txn_details = txn_details
        self.base_details = base_details  
+       self.base_price_comp = base_price_comp
        self.no_of_slabs = no_of_slabs  
     
     def aasaan_postpaid_base_price(self):
@@ -31,13 +32,21 @@ class AasaanPostPaidBasePriceCalculation:
         price = 12*price
         return price 
         
-            
+    def aasaan_postpaid_base_price_comp(self):
+        price_comp = float(self.txn_details[0])*float(self.base_price_comp[0])
+        if(int(self.no_of_slabs)>1):
+            for i in range(1, int(self.no_of_slabs)):
+                price_comp = price_comp + (float(self.txn_details[i])-float(self.txn_details[i-1]))*float(self.base_price_comp[i])
+        price_comp = 12*price_comp 
+        return price_comp
+
 
 #Postpaid Aasaan Base Price Price Calculation
 class AasaanPostPaidBasePercCalculation:
-    def __init__(self,txn_details,base_details,aov,no_of_slabs):
+    def __init__(self,txn_details,base_details,base_comp_details, aov,no_of_slabs):
        self.txn_details = txn_details
-       self.base_details = base_details  
+       self.base_details = base_details
+       self.base_comp_details = base_comp_details  
        self.aov = aov
        self.no_of_slabs = no_of_slabs  
     
@@ -48,6 +57,15 @@ class AasaanPostPaidBasePercCalculation:
                 price = price + (int(self.txn_details[i])-int(self.txn_details[i-1]))*float(self.base_details[i])*0.01*float(self.aov)
         price = 12*price
         return price
+
+    def aasaan_postpaid_comp_base_perc(self):
+        price_comp = float(self.txn_details[0])*float(self.base_comp_details[0])*0.01*float(self.aov)
+        if(int(self.no_of_slabs)>1):
+            for i in range(1, int(self.no_of_slabs)):
+                price_comp = price_comp + (int(self.txn_details[i])-int(self.txn_details[i-1]))*float(self.base_comp_details[i])*0.01*float(self.aov)
+        price_comp = 12*price_comp
+        return price_comp
+ 
 
 
 class CompetitorPriceCalculation:
@@ -175,8 +193,8 @@ with st.container():
     st.subheader("Pricing Model Selector")  
     
     #Taking the inputs aov,  txn and distribution details for comp. benchmarking
-    aov_check = st.text_input("Avg. Order Value (in Rs.)", key="check")
-    monthly_txn_check= st.text_input("Avg. Transactions per Month", key="check txn")
+    aov_check = st.number_input("Avg. Order Value (in Rs.)", key="check")
+    monthly_txn_check= st.number_input("Avg. Transactions per Month", key="check txn")
     txn_nature = st.radio("Select the nature of the monthly transactions over the year", ["Constant", "Fluctuating"], key="txn_nature_key")
 
     if aov_check and monthly_txn_check:
@@ -194,8 +212,8 @@ with st.container():
             st.subheader("Prepaid Pricing Model")  
             
             #Taking the inputs aov and txn details for comp. benchmarking
-            aov = st.text_input("Avg. Order Value (in Rs.)")
-            monthly_txn = st.text_input("Avg. Transactions per Month")
+            aov = st.number_input("Avg. Order Value (in Rs.)")
+            monthly_txn = st.number_input("Avg. Transactions per Month")
 
             #Subscription Plan Dropdown 
             subscription_plans_options = ['Quarterly', 'Half-yearly', 'Yearly']
@@ -224,23 +242,27 @@ with st.container():
         else:
             st.write("Non-Tiered")
             no_of_slabs = 1
-        aov_bprice = st.text_input("Avg. Order Value (in Rs.)", key="AOV base price")
+        aov_bprice = st.number_input("Avg. Order Value (in Rs.)", key="AOV base price")
         max_txn = []
         base_price=[]
+        base_price_comp = []
         if no_of_slabs:
             if int(no_of_slabs)<=5 and int(no_of_slabs)>0:
                 for i in range(int(no_of_slabs)):
                     st.text(f"Slab {i+1}")
-                    max_txn.append(st.text_input("Maximum number of transactions per month",key = f"key{i}"))
-                    base_price.append(st.text_input("Price per transaction(in Rs.)", key = f"key{i+10}"))
+                    max_txn.append(st.number_input("Maximum number of transactions per month",key = f"key{i}"))
+                    base_price.append(st.number_input("Price per transaction(in Rs.)", key = f"key{i+10}"))
+                    base_price_comp.append(st.number_input("Competitor Price per transaction(in Rs.)", key = f"key{i+100}"))
             else:
                 st.error("Number of slabs can be from 1-5")
             postpaid_base_price_button = st.button("Calculate Price", key="postpaid base price")
 
             if postpaid_base_price_button:
-                postpaid_base_price_obj = AasaanPostPaidBasePriceCalculation(max_txn, base_price, no_of_slabs)
+                postpaid_base_price_obj = AasaanPostPaidBasePriceCalculation(max_txn, base_price, base_price_comp, no_of_slabs)
                 postpaid_baseprice_pricing = postpaid_base_price_obj.aasaan_postpaid_base_price()
+                postpaid_baseprice_comp_pricing = postpaid_base_price_obj.aasaan_postpaid_base_price_comp()
                 st.metric("Aasaan", postpaid_baseprice_pricing)
+                st.metric("Competitor", postpaid_baseprice_comp_pricing)
 
                 monthly_txn_bprice = max(max_txn)
                 #st.write(monthly_txn_bprice)
@@ -260,29 +282,33 @@ with st.container():
         st.subheader("Postpaid Pricing Model: Base Percentage")
         if isTiered:
             st.write("Tiered")
-            no_of_slabs = st.text_input("Enter number of slabs", key="base percentage")
+            no_of_slabs = st.number_input("Enter number of slabs", key="base percentage")
             st.button("Get Slabs", key="base_perc_key")
         else:
             st.write("Non-Tiered")
             no_of_slabs = 1
-        aov_bperc = st.text_input("Avg. Order Value (in Rs.)", key="AOV base percentage")
+        aov_bperc = st.number_input("Avg. Order Value (in Rs.)", key="AOV base percentage")
         max_txn_perc = []
         base_perc=[]
+        base_perc_comp = []
         if no_of_slabs:
             if int(no_of_slabs)<=5 and int(no_of_slabs)>0:
                 for i in range(int(no_of_slabs)):
                     st.text(f"Slab {i+1}")
-                    max_txn_perc.append(st.text_input("Maximum number of transactions per month",key = f"key{i+20}"))
-                    base_perc.append(st.text_input("Percentage per transaction amount(in %)", key = f"key{i+50}"))
+                    max_txn_perc.append(st.number_input("Maximum number of transactions per month",key = f"key{i+20}"))
+                    base_perc.append(st.number_input("Percentage per transaction amount(in %)", key = f"key{i+50}"))
+                    base_perc_comp.append(st.number_input("Competitor Percentage per transaction amount(in %)", key = f"key{i+150}"))
             else:
                 st.error("Number of slabs can be from 1-5")
            
             postpaid_base_perc_button = st.button("Calculate Price", key="postpaid base perc")
 
             if postpaid_base_perc_button and aov_bperc:
-                postpaid_base_perc_obj = AasaanPostPaidBasePercCalculation(max_txn_perc, base_perc, aov_bperc, no_of_slabs)
+                postpaid_base_perc_obj = AasaanPostPaidBasePercCalculation(max_txn_perc, base_perc, base_perc_comp, aov_bperc, no_of_slabs)
                 postpaid_baseperc_pricing = postpaid_base_perc_obj.aasaan_postpaid_base_perc()
+                postpaid_baseperc_comp_pricing = postpaid_base_perc_obj.aasaan_postpaid_comp_base_perc()
                 st.metric("Aasaan", postpaid_baseperc_pricing)
+                st.metric("Competitor", postpaid_baseperc_comp_pricing)
 
                 monthly_txn_bperc = max(max_txn_perc)
                 
