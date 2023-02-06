@@ -1,6 +1,5 @@
 import streamlit as st
 from PIL import Image
-import pandas as pd
 st.set_page_config(page_title="Aasaan Checkout Price Calculator", page_icon=":tada:", layout="wide")
 
 #Load Assets
@@ -193,8 +192,8 @@ with st.container():
     st.subheader("Pricing Model Selector")  
     
     #Taking the inputs aov,  txn and distribution details for comp. benchmarking
-    aov_check = st.number_input("Avg. Order Value (in Rs.)", key="check")
-    monthly_txn_check= st.number_input("Avg. Transactions per Month", key="check txn")
+    aov_check = st.text_input("Avg. Order Value (in Rs.)", key="check")
+    monthly_txn_check= st.text_input("Avg. Transactions per Month", key="check txn")
     txn_nature = st.radio("Select the nature of the monthly transactions over the year", ["Constant", "Fluctuating"], key="txn_nature_key")
 
     if aov_check and monthly_txn_check:
@@ -212,8 +211,8 @@ with st.container():
             st.subheader("Prepaid Pricing Model")  
             
             #Taking the inputs aov and txn details for comp. benchmarking
-            aov = st.number_input("Avg. Order Value (in Rs.)")
-            monthly_txn = st.number_input("Avg. Transactions per Month")
+            aov = st.text_input("Avg. Order Value (in Rs.)")
+            monthly_txn = st.text_input("Avg. Transactions per Month")
 
             #Subscription Plan Dropdown 
             subscription_plans_options = ['Quarterly', 'Half-yearly', 'Yearly']
@@ -242,7 +241,7 @@ with st.container():
         else:
             st.write("Non-Tiered")
             no_of_slabs = 1
-        aov_bprice = st.number_input("Avg. Order Value (in Rs.)", key="AOV base price")
+        aov_bprice = st.text_input("Avg. Order Value (in Rs.)", key="AOV base price")
         max_txn = []
         base_price=[]
         base_price_comp = []
@@ -250,7 +249,7 @@ with st.container():
             if int(no_of_slabs)<=5 and int(no_of_slabs)>0:
                 for i in range(int(no_of_slabs)):
                     st.text(f"Slab {i+1}")
-                    max_txn.append(st.number_input("Maximum number of transactions per month",key = f"key{i}"))
+                    max_txn.append(st.text_input("Maximum number of transactions per month",key = f"key{i}"))
                     base_price.append(st.number_input("Price per transaction(in Rs.)", key = f"key{i+10}"))
                     base_price_comp.append(st.number_input("Competitor Price per transaction(in Rs.)", key = f"key{i+100}"))
             else:
@@ -282,12 +281,12 @@ with st.container():
         st.subheader("Postpaid Pricing Model: Base Percentage")
         if isTiered:
             st.write("Tiered")
-            no_of_slabs = st.number_input("Enter number of slabs", key="base percentage")
+            no_of_slabs = st.text_input("Enter number of slabs", key="base percentage")
             st.button("Get Slabs", key="base_perc_key")
         else:
             st.write("Non-Tiered")
             no_of_slabs = 1
-        aov_bperc = st.number_input("Avg. Order Value (in Rs.)", key="AOV base percentage")
+        aov_bperc = st.text_input("Avg. Order Value (in Rs.)", key="AOV base percentage")
         max_txn_perc = []
         base_perc=[]
         base_perc_comp = []
@@ -295,7 +294,7 @@ with st.container():
             if int(no_of_slabs)<=5 and int(no_of_slabs)>0:
                 for i in range(int(no_of_slabs)):
                     st.text(f"Slab {i+1}")
-                    max_txn_perc.append(st.number_input("Maximum number of transactions per month",key = f"key{i+20}"))
+                    max_txn_perc.append(st.text_input("Maximum number of transactions per month",key = f"key{i+20}"))
                     base_perc.append(st.number_input("Percentage per transaction amount(in %)", key = f"key{i+50}"))
                     base_perc_comp.append(st.number_input("Competitor Percentage per transaction amount(in %)", key = f"key{i+150}"))
             else:
