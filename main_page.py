@@ -15,13 +15,12 @@ def aasaan_prepaid(plan):
     elif plan=="Yearly":
         return 35000
 
-#Postpaid Aasaan Base Percentage Price Calculation
+#Postpaid Aasaan Base Price Calculation
 class AasaanPostPaidBasePriceCalculation:
-    def __init__(self,txn_details,base_details, base_price_comp, aov_bperc, no_of_slabs):
+    def __init__(self,txn_details,base_details, base_price_comp, no_of_slabs):
        self.txn_details = txn_details
        self.base_details = base_details  
        self.base_price_comp = base_price_comp
-       self.aov_bperc = aov_bperc
        self.no_of_slabs = no_of_slabs  
     
     def aasaan_postpaid_base_price(self):
@@ -36,32 +35,33 @@ class AasaanPostPaidBasePriceCalculation:
         price_comp = float(self.txn_details[0])*float(self.base_price_comp[0])*0.01*float(self.aov_bperc)
         if(int(self.no_of_slabs)>1):
             for i in range(1, int(self.no_of_slabs)):
-                price_comp = price_comp + (float(self.txn_details[i])-float(self.txn_details[i-1]))*float(self.base_price_comp[i])*0.01*float(self.aov_bperc)
+                price_comp = price_comp + (float(self.txn_details[i])-float(self.txn_details[i-1]))*float(self.base_price_comp[i])
         price_comp = 12*price_comp 
         return price_comp
 
 
-#Postpaid Aasaan Base Price Price Calculation
+#Postpaid Aasaan Base Percentage Calculation
 class AasaanPostPaidBasePercCalculation:
-    def __init__(self,txn_details,base_details,base_comp_details, no_of_slabs):
+    def __init__(self,txn_details,base_details,base_comp_details, aov_bperc, no_of_slabs):
        self.txn_details = txn_details
        self.base_details = base_details
        self.base_comp_details = base_comp_details  
+       self.aov_bperc = aov_bperc 
        self.no_of_slabs = no_of_slabs  
     
     def aasaan_postpaid_base_perc(self):
-        price = float(self.txn_details[0])*float(self.base_details[0])
+        price = float(self.txn_details[0])*float(self.base_details[0])*0.01*float(self.aov_bperc)
         if(int(self.no_of_slabs)>1):
             for i in range(1, int(self.no_of_slabs)):
-                price = price + (int(self.txn_details[i])-int(self.txn_details[i-1]))*float(self.base_details[i])
+                price = price + (int(self.txn_details[i])-int(self.txn_details[i-1]))*float(self.base_details[i])*0.01*float(self.aov_bperc)
         price = 12*price
         return price
 
     def aasaan_postpaid_comp_base_perc(self):
-        price_comp = float(self.txn_details[0])*float(self.base_comp_details[0])
+        price_comp = float(self.txn_details[0])*float(self.base_comp_details[0])*0.01*float(self.aov_bperc)
         if(int(self.no_of_slabs)>1):
             for i in range(1, int(self.no_of_slabs)):
-                price_comp = price_comp + (int(self.txn_details[i])-int(self.txn_details[i-1]))*float(self.base_comp_details[i])
+                price_comp = price_comp + (int(self.txn_details[i])-int(self.txn_details[i-1]))*float(self.base_comp_details[i])*0.01*float(self.aov_bperc)
         price_comp = 12*price_comp
         return price_comp
  
