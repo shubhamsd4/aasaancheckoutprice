@@ -211,7 +211,7 @@ with st.container():
             st.subheader("Prepaid Pricing Model")  
             
             #Taking the inputs aov and txn details for comp. benchmarking
-            aov = st.text_input("Avg. Order Value (in Rs.)")
+            aov = st.text_input("Avg. Order Value (in Rs.)", value=aov_check)
             monthly_txn = st.text_input("Avg. Transactions per Month")
 
             #Subscription Plan Dropdown 
@@ -241,7 +241,7 @@ with st.container():
         else:
             st.write("Non-Tiered")
             no_of_slabs = 1
-        aov_bprice = st.text_input("Avg. Order Value (in Rs.)", key="AOV base price")
+        aov_bprice = st.text_input("Avg. Order Value (in Rs.)", value=aov_check, key="AOV base price")
         max_txn = []
         base_price=[]
         base_price_comp = []
@@ -286,7 +286,7 @@ with st.container():
         else:
             st.write("Non-Tiered")
             no_of_slabs = 1
-        aov_bperc = st.text_input("Avg. Order Value (in Rs.)", key="AOV base percentage")
+        aov_bperc = st.text_input("Avg. Order Value (in Rs.)", value=aov_check , key="AOV base percentage")
         max_txn_perc = []
         base_perc=[]
         base_perc_comp = []
