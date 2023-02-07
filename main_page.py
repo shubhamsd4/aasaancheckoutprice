@@ -249,7 +249,7 @@ with st.container():
             if int(no_of_slabs)<=5 and int(no_of_slabs)>0:
                 for i in range(int(no_of_slabs)):
                     st.text(f"Slab {i+1}")
-                    if no_slabs==1:
+                    if no_of_slabs==1:
                         max_txn.append(st.text_input("Maximum number of transactions per month",value = monthly_txn_check, key = f"key{i}"))
                     else:   
                         max_txn.append(st.text_input("Maximum number of transactions per month", key = f"key{i}"))
@@ -297,7 +297,7 @@ with st.container():
             if int(no_of_slabs)<=5 and int(no_of_slabs)>0:
                 for i in range(int(no_of_slabs)):
                     st.text(f"Slab {i+1}")
-                    if no_slabs==1:
+                    if no_of_slabs==1:
                         max_txn_perc.append(st.text_input("Maximum number of transactions per month", value= monthly_txn_check, key = f"key{i+20}"))
                     else:
                         max_txn_perc.append(st.text_input("Maximum number of transactions per month", key = f"key{i+20}"))
