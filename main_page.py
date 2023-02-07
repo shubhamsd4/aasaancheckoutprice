@@ -50,18 +50,18 @@ class AasaanPostPaidBasePercCalculation:
        self.no_of_slabs = no_of_slabs  
     
     def aasaan_postpaid_base_perc(self):
-        price = float(self.txn_details[0])*float(self.base_details[0])*0.01*float(self.aov)
+        price = float(self.txn_details[0])*float(self.base_details[0])
         if(int(self.no_of_slabs)>1):
             for i in range(1, int(self.no_of_slabs)):
-                price = price + (int(self.txn_details[i])-int(self.txn_details[i-1]))*float(self.base_details[i])*0.01*float(self.aov)
+                price = price + (int(self.txn_details[i])-int(self.txn_details[i-1]))*float(self.base_details[i])
         price = 12*price
         return price
 
     def aasaan_postpaid_comp_base_perc(self):
-        price_comp = float(self.txn_details[0])*float(self.base_comp_details[0])*0.01*float(self.aov)
+        price_comp = float(self.txn_details[0])*float(self.base_comp_details[0])
         if(int(self.no_of_slabs)>1):
             for i in range(1, int(self.no_of_slabs)):
-                price_comp = price_comp + (int(self.txn_details[i])-int(self.txn_details[i-1]))*float(self.base_comp_details[i])*0.01*float(self.aov)
+                price_comp = price_comp + (int(self.txn_details[i])-int(self.txn_details[i-1]))*float(self.base_comp_details[i])
         price_comp = 12*price_comp
         return price_comp
  
