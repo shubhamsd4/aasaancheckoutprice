@@ -42,11 +42,10 @@ class AasaanPostPaidBasePriceCalculation:
 
 #Postpaid Aasaan Base Price Price Calculation
 class AasaanPostPaidBasePercCalculation:
-    def __init__(self,txn_details,base_details,base_comp_details, aov,no_of_slabs):
+    def __init__(self,txn_details,base_details,base_comp_details, no_of_slabs):
        self.txn_details = txn_details
        self.base_details = base_details
        self.base_comp_details = base_comp_details  
-       self.aov = aov
        self.no_of_slabs = no_of_slabs  
     
     def aasaan_postpaid_base_perc(self):
@@ -241,7 +240,6 @@ with st.container():
         else:
             st.subheader("Non-Tiered")
             no_of_slabs = 1
-        aov_bprice = st.text_input("Avg. Order Value (in Rs.)", value=aov_check, key="AOV base price")
         max_txn = []
         base_price=[]
         base_price_comp = []
