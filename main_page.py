@@ -17,10 +17,11 @@ def aasaan_prepaid(plan):
 
 #Postpaid Aasaan Base Percentage Price Calculation
 class AasaanPostPaidBasePriceCalculation:
-    def __init__(self,txn_details,base_details, base_price_comp, no_of_slabs):
+    def __init__(self,txn_details,base_details, base_price_comp, aov_bperc, no_of_slabs):
        self.txn_details = txn_details
        self.base_details = base_details  
        self.base_price_comp = base_price_comp
+       self.aov_bperc = aov_bperc
        self.no_of_slabs = no_of_slabs  
     
     def aasaan_postpaid_base_price(self):
@@ -32,10 +33,10 @@ class AasaanPostPaidBasePriceCalculation:
         return price 
         
     def aasaan_postpaid_base_price_comp(self):
-        price_comp = float(self.txn_details[0])*float(self.base_price_comp[0])
+        price_comp = float(self.txn_details[0])*float(self.base_price_comp[0])*0.01*float(aov_bperc)
         if(int(self.no_of_slabs)>1):
             for i in range(1, int(self.no_of_slabs)):
-                price_comp = price_comp + (float(self.txn_details[i])-float(self.txn_details[i-1]))*float(self.base_price_comp[i])
+                price_comp = price_comp + (float(self.txn_details[i])-float(self.txn_details[i-1]))*float(self.base_price_comp[i])*0.01*float(aov_bperc)
         price_comp = 12*price_comp 
         return price_comp
 
