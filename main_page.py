@@ -212,7 +212,7 @@ with st.container():
             
             #Taking the inputs aov and txn details for comp. benchmarking
             aov = st.text_input("Avg. Order Value (in Rs.)", value=aov_check)
-            monthly_txn = st.text_input("Avg. Transactions per Month")
+            monthly_txn = st.text_input("Avg. Transactions per Month", value = monthly_txn_check)
 
             #Subscription Plan Dropdown 
             subscription_plans_options = ['Quarterly', 'Half-yearly', 'Yearly']
@@ -249,7 +249,10 @@ with st.container():
             if int(no_of_slabs)<=5 and int(no_of_slabs)>0:
                 for i in range(int(no_of_slabs)):
                     st.text(f"Slab {i+1}")
-                    max_txn.append(st.text_input("Maximum number of transactions per month",key = f"key{i}"))
+                    if no_slabs==1:
+                        max_txn.append(st.text_input("Maximum number of transactions per month",value = monthly_txn_check, key = f"key{i}"))
+                    else:   
+                        max_txn.append(st.text_input("Maximum number of transactions per month", key = f"key{i}"))
                     base_price.append(st.number_input("Price per transaction(in Rs.)", key = f"key{i+10}"))
                     base_price_comp.append(st.number_input("Competitor Price per transaction(in Rs.)", key = f"key{i+100}"))
             else:
@@ -294,7 +297,10 @@ with st.container():
             if int(no_of_slabs)<=5 and int(no_of_slabs)>0:
                 for i in range(int(no_of_slabs)):
                     st.text(f"Slab {i+1}")
-                    max_txn_perc.append(st.text_input("Maximum number of transactions per month",key = f"key{i+20}"))
+                    if no_slabs==1:
+                        max_txn_perc.append(st.text_input("Maximum number of transactions per month", value= monthly_txn_check, key = f"key{i+20}"))
+                    else:
+                        max_txn_perc.append(st.text_input("Maximum number of transactions per month", key = f"key{i+20}"))
                     base_perc.append(st.number_input("Percentage per transaction amount(in %)", key = f"key{i+50}"))
                     base_perc_comp.append(st.number_input("Competitor Percentage per transaction amount(in %)", key = f"key{i+150}"))
             else:
