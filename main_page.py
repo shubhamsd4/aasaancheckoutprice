@@ -283,11 +283,11 @@ with st.container():
     if priceModule =="Postpaid Base Percentage":    
         st.subheader("Postpaid Pricing Model: Base Percentage")
         if isTiered:
-            st.write("Tiered")
+            st.subheader("Tiered")
             no_of_slabs = st.text_input("Enter number of slabs", key="base percentage")
             st.button("Get Slabs", key="base_perc_key")
         else:
-            st.write("Non-Tiered")
+            st.subheader("Non-Tiered")
             no_of_slabs = 1
         aov_bperc = st.text_input("Avg. Order Value (in Rs.)", value=aov_check , key="AOV base percentage")
         max_txn_perc = []
