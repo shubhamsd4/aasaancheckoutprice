@@ -240,6 +240,7 @@ with st.container():
         else:
             st.subheader("Non-Tiered")
             no_of_slabs = 1
+        aov_bprice = st.text_input("Avg. Order Value (in Rs.)", value=aov_check , key="AOV base price")
         max_txn = []
         base_price=[]
         base_price_comp = []
