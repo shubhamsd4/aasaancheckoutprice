@@ -264,7 +264,8 @@ with st.container():
                 postpaid_baseprice_pricing = postpaid_base_price_obj.aasaan_postpaid_base_price()
                 postpaid_baseprice_comp_pricing = postpaid_base_price_obj.aasaan_postpaid_base_price_comp()
                 st.metric("Aasaan", postpaid_baseprice_pricing)
-                st.metric("Competitor", postpaid_baseprice_comp_pricing)
+                if postpaid_baseprice_comp_pricing:
+                    st.metric("Competitor", postpaid_baseprice_comp_pricing)
 
                 monthly_txn_bprice = max(max_txn)
                 #st.write(monthly_txn_bprice)
@@ -313,7 +314,8 @@ with st.container():
                 postpaid_baseperc_pricing = postpaid_base_perc_obj.aasaan_postpaid_base_perc()
                 postpaid_baseperc_comp_pricing = postpaid_base_perc_obj.aasaan_postpaid_comp_base_perc()
                 st.metric("Aasaan", postpaid_baseperc_pricing)
-                st.metric("Competitor", postpaid_baseperc_comp_pricing)
+                if postpaid_baseperc_comp_pricing:
+                    st.metric("Competitor", postpaid_baseperc_comp_pricing)
 
                 monthly_txn_bperc = max(max_txn_perc)
                 
