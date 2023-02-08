@@ -77,7 +77,7 @@ class CompetitorPriceCalculation:
         xpresslane_txn_perc = 0.8
         return round(12*self.txn*self.AOV*xpresslane_txn_perc*0.01,2)
 
-    #Nimbl Price Calculation
+    #Nimbbl Price Calculation
     def nimbl_price(self):
         nimbl_txn_perc = 2.1
         return round(12*self.txn*self.AOV*nimbl_txn_perc*0.01, 2)
@@ -111,8 +111,8 @@ def comp_price_dict(monthly_txn, aov,selected_competitors):
     comp_price_calculator = CompetitorPriceCalculation(float(monthly_txn), float(aov))
     if 'Xpresslane' in selected_competitors:
         competitor_prices['Xpresslane'] = comp_price_calculator.xpresslane_price()
-    if 'Nimbl' in selected_competitors:
-        competitor_prices['Nimbl'] = comp_price_calculator.nimbl_price()
+    if 'Nimbbl' in selected_competitors:
+        competitor_prices['Nimbbl'] = comp_price_calculator.nimbl_price()
     if 'GoKwik' in selected_competitors:
         competitor_prices['GoKwik'] = comp_price_calculator.gokwik_price()
     if 'Shopflo' in selected_competitors:
@@ -180,7 +180,7 @@ with st.container():
 with st.container():
     st.write("---")
     st.subheader("Competitor Comparision")
-    competitor_names = ['GoKwik', 'Shopflo','Xpresslane','Nimbl']
+    competitor_names = ['GoKwik', 'Shopflo','Xpresslane','Nimbbl']
     selected_competitors = st.multiselect("Select Competitors to compare with", competitor_names)
     #update_competitor = st.button("Update Competitors")
     competitor_prices = {}
