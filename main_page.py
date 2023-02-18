@@ -1,5 +1,6 @@
 import streamlit as st
 from PIL import Image
+import pandas as pd
 st.set_page_config(page_title="Aasaan Checkout Price Calculator", page_icon=":tada:", layout="wide")
 
 #Load Assets
@@ -15,7 +16,7 @@ def aasaan_prepaid(plan):
     elif plan=="Yearly":
         return 35000
 
-#Postpaid Aasaan Base Price Calculation
+#Postpaid Aasaan Base Percentage Price Calculation
 class AasaanPostPaidBasePriceCalculation:
     def __init__(self,txn_details,base_details, base_price_comp, no_of_slabs):
        self.txn_details = txn_details
@@ -40,28 +41,28 @@ class AasaanPostPaidBasePriceCalculation:
         return price_comp
 
 
-#Postpaid Aasaan Base Percentage Calculation
+#Postpaid Aasaan Base Price Price Calculation
 class AasaanPostPaidBasePercCalculation:
-    def __init__(self,txn_details,base_details,base_comp_details, aov_bperc, no_of_slabs):
+    def __init__(self,txn_details,base_details,base_comp_details, aov,no_of_slabs):
        self.txn_details = txn_details
        self.base_details = base_details
        self.base_comp_details = base_comp_details  
-       self.aov_bperc = aov_bperc 
+       self.aov = aov
        self.no_of_slabs = no_of_slabs  
     
     def aasaan_postpaid_base_perc(self):
-        price = float(self.txn_details[0])*float(self.base_details[0])*0.01*float(self.aov_bperc)
+        price = float(self.txn_details[0])*float(self.base_details[0])*0.01*float(self.aov)
         if(int(self.no_of_slabs)>1):
             for i in range(1, int(self.no_of_slabs)):
-                price = price + (int(self.txn_details[i])-int(self.txn_details[i-1]))*float(self.base_details[i])*0.01*float(self.aov_bperc)
+                price = price + (int(self.txn_details[i])-int(self.txn_details[i-1]))*float(self.base_details[i])*0.01*float(self.aov)
         price = 12*price
         return price
 
     def aasaan_postpaid_comp_base_perc(self):
-        price_comp = float(self.txn_details[0])*float(self.base_comp_details[0])*0.01*float(self.aov_bperc)
+        price_comp = float(self.txn_details[0])*float(self.base_comp_details[0])*0.01*float(self.aov)
         if(int(self.no_of_slabs)>1):
             for i in range(1, int(self.no_of_slabs)):
-                price_comp = price_comp + (int(self.txn_details[i])-int(self.txn_details[i-1]))*float(self.base_comp_details[i])*0.01*float(self.aov_bperc)
+                price_comp = price_comp + (int(self.txn_details[i])-int(self.txn_details[i-1]))*float(self.base_comp_details[i])*0.01*float(self.aov)
         price_comp = 12*price_comp
         return price_comp
  
@@ -77,7 +78,7 @@ class CompetitorPriceCalculation:
         xpresslane_txn_perc = 0.8
         return round(12*self.txn*self.AOV*xpresslane_txn_perc*0.01,2)
 
-    #Nimbbl Price Calculation
+    #Nimbl Price Calculation
     def nimbl_price(self):
         nimbl_txn_perc = 2.1
         return round(12*self.txn*self.AOV*nimbl_txn_perc*0.01, 2)
@@ -111,8 +112,8 @@ def comp_price_dict(monthly_txn, aov,selected_competitors):
     comp_price_calculator = CompetitorPriceCalculation(float(monthly_txn), float(aov))
     if 'Xpresslane' in selected_competitors:
         competitor_prices['Xpresslane'] = comp_price_calculator.xpresslane_price()
-    if 'Nimbbl' in selected_competitors:
-        competitor_prices['Nimbbl'] = comp_price_calculator.nimbl_price()
+    if 'Nimbl' in selected_competitors:
+        competitor_prices['Nimbl'] = comp_price_calculator.nimbl_price()
     if 'GoKwik' in selected_competitors:
         competitor_prices['GoKwik'] = comp_price_calculator.gokwik_price()
     if 'Shopflo' in selected_competitors:
@@ -180,7 +181,7 @@ with st.container():
 with st.container():
     st.write("---")
     st.subheader("Competitor Comparision")
-    competitor_names = ['GoKwik', 'Shopflo','Xpresslane','Nimbbl']
+    competitor_names = ['GoKwik', 'Shopflo','Xpresslane','Nimbl']
     selected_competitors = st.multiselect("Select Competitors to compare with", competitor_names)
     #update_competitor = st.button("Update Competitors")
     competitor_prices = {}
@@ -192,8 +193,13 @@ with st.container():
     st.subheader("Pricing Model Selector")  
     
     #Taking the inputs aov,  txn and distribution details for comp. benchmarking
-    aov_check = st.text_input("Avg. Order Value (in Rs.)", key="check")
-    monthly_txn_check= st.text_input("Avg. Transactions per Month", key="check txn")
+    left_column, right_column = st.columns(2)
+    with left_column:
+        aov_check = st.text_input("Avg. Order Value (in Rs.)", key="check")
+    
+    with right_column:
+        monthly_txn_check= st.text_input("Avg. Transactions per Month", key="check txn")
+
     txn_nature = st.radio("Select the nature of the monthly transactions over the year", ["Constant", "Fluctuating"], key="txn_nature_key")
 
     if aov_check and monthly_txn_check:
@@ -211,8 +217,11 @@ with st.container():
             st.subheader("Prepaid Pricing Model")  
             
             #Taking the inputs aov and txn details for comp. benchmarking
-            aov = st.text_input("Avg. Order Value (in Rs.)", value=aov_check)
-            monthly_txn = st.text_input("Avg. Transactions per Month", value = monthly_txn_check)
+            left_column, right_column = st.columns(2)
+            with left_column:
+                aov = st.text_input("Avg. Order Value (in Rs.)", value=aov_check)
+            with right_column:
+                monthly_txn = st.text_input("Avg. Transactions per Month", value = monthly_txn_check)
 
             #Subscription Plan Dropdown 
             subscription_plans_options = ['Quarterly', 'Half-yearly', 'Yearly']
@@ -222,11 +231,13 @@ with st.container():
             #Competitor Function Values   
             if aov and monthly_txn:
                 competitor_prices = comp_price_dict(monthly_txn, aov,selected_competitors)
-            
+            aasaan_column, comp_column = st.columns(2)
             if prepaid_button:
-                st.metric("Aasaan",aasaan_prepaid(selected_subscription_plan))
-                for key in competitor_prices.keys():
-                    st.metric(key, competitor_prices[key])
+                with aasaan_column:
+                    st.metric("Aasaan",aasaan_prepaid(selected_subscription_plan))
+                with comp_column:
+                    for key in competitor_prices.keys():
+                        st.metric(key, competitor_prices[key])
     else:
         st.empty()
 
@@ -235,47 +246,52 @@ with st.container():
     if priceModule == "Postpaid Base Price":    
         st.subheader("Postpaid Pricing Model: Base Price")
         if isTiered:
-            st.subheader("Tiered")
+            st.write("Tiered")
             no_of_slabs = st.text_input("Enter number of slabs")
             st.button("Get Slabs")
         else:
-            st.subheader("Non-Tiered")
+            st.write("Non-Tiered")
             no_of_slabs = 1
-        aov_bprice = st.text_input("Avg. Order Value (in Rs.)", value=aov_check , key="AOV base price")
+        aov_bprice = st.text_input("Avg. Order Value (in Rs.)", value=aov_check, key="AOV base price")
         max_txn = []
         base_price=[]
         base_price_comp = []
+        left_column, right_column = st.columns(2)
         if no_of_slabs:
             if int(no_of_slabs)<=5 and int(no_of_slabs)>0:
                 for i in range(int(no_of_slabs)):
-                    st.text(f"Slab {i+1}")
-                    if no_of_slabs==1:
-                        max_txn.append(st.text_input("Maximum number of transactions per month",value = monthly_txn_check, key = f"key{i}"))
-                    else:   
-                        max_txn.append(st.text_input("Maximum number of transactions per month", key = f"key{i}"))
-                    base_price.append(st.number_input("Price per transaction(in Rs.)", key = f"key{i+10}"))
-                    base_price_comp.append(st.number_input("Competitor Price per transaction(in Rs.)", key = f"key{i+100}"))
+                    with left_column:
+                        st.text(f"Slab {i+1}")
+                        if no_of_slabs ==1:
+                            max_txn.append(st.text_input("Maximum number of transactions per month",value= monthly_txn_check, key = f"key{i}"))
+                        else:
+                            max_txn.append(st.text_input("Maximum number of transactions per month",key = f"key{i}"))
+                    with right_column:
+                        base_price.append(st.number_input("Price per transaction(in Rs.)", key = f"key{i+10}"))
+                        base_price_comp.append(st.number_input("Competitor Price per transaction(in Rs.)", key = f"key{i+100}"))
             else:
                 st.error("Number of slabs can be from 1-5")
             postpaid_base_price_button = st.button("Calculate Price", key="postpaid base price")
 
+            aasaan_column, comp_column = st.columns(2)
             if postpaid_base_price_button:
                 postpaid_base_price_obj = AasaanPostPaidBasePriceCalculation(max_txn, base_price, base_price_comp, no_of_slabs)
                 postpaid_baseprice_pricing = postpaid_base_price_obj.aasaan_postpaid_base_price()
                 postpaid_baseprice_comp_pricing = postpaid_base_price_obj.aasaan_postpaid_base_price_comp()
-                st.metric("Aasaan", postpaid_baseprice_pricing)
-                if postpaid_baseprice_comp_pricing:
+                with aasaan_column:
+                    st.metric("Aasaan", postpaid_baseprice_pricing)
+                with comp_column:
                     st.metric("Competitor", postpaid_baseprice_comp_pricing)
 
-                monthly_txn_bprice = max(max_txn)
-                #st.write(monthly_txn_bprice)
-                #Competitor Function Values   
-                if aov_bprice and monthly_txn_bprice:
-                    competitor_prices = comp_price_dict(monthly_txn_bprice, aov_bprice,selected_competitors)
+                    monthly_txn_bprice = max(max_txn)
+                    #st.write(monthly_txn_bprice)
+                    #Competitor Function Values   
+                    if aov_bprice and monthly_txn_bprice:
+                        competitor_prices = comp_price_dict(monthly_txn_bprice, aov_bprice,selected_competitors)
 
 
-                for key in competitor_prices.keys():
-                    st.metric(key, competitor_prices[key])
+                    for key in competitor_prices.keys():
+                        st.metric(key, competitor_prices[key])
     else:
         st.empty()
                 
@@ -284,47 +300,52 @@ with st.container():
     if priceModule =="Postpaid Base Percentage":    
         st.subheader("Postpaid Pricing Model: Base Percentage")
         if isTiered:
-            st.subheader("Tiered")
+            st.write("Tiered")
             no_of_slabs = st.text_input("Enter number of slabs", key="base percentage")
             st.button("Get Slabs", key="base_perc_key")
         else:
-            st.subheader("Non-Tiered")
+            st.write("Non-Tiered")
             no_of_slabs = 1
-        aov_bperc = st.text_input("Avg. Order Value (in Rs.)", value=aov_check , key="AOV base percentage")
+        aov_bperc = st.text_input("Avg. Order Value (in Rs.)", value=aov_check, key="AOV base percentage")
         max_txn_perc = []
         base_perc=[]
         base_perc_comp = []
+        left_column, right_column = st.columns(2)
         if no_of_slabs:
             if int(no_of_slabs)<=5 and int(no_of_slabs)>0:
                 for i in range(int(no_of_slabs)):
-                    st.text(f"Slab {i+1}")
-                    if no_of_slabs==1:
-                        max_txn_perc.append(st.text_input("Maximum number of transactions per month", value= monthly_txn_check, key = f"key{i+20}"))
-                    else:
-                        max_txn_perc.append(st.text_input("Maximum number of transactions per month", key = f"key{i+20}"))
-                    base_perc.append(st.number_input("Percentage per transaction amount(in %)", key = f"key{i+50}"))
-                    base_perc_comp.append(st.number_input("Competitor Percentage per transaction amount(in %)", key = f"key{i+150}"))
+                    with left_column:
+                        st.text(f"Slab {i+1}")
+                        if no_of_slabs ==1:
+                            max_txn_perc.append(st.text_input("Maximum number of transactions per month", value=monthly_txn_check, key = f"key{i+20}"))
+                        else:
+                            max_txn_perc.append(st.text_input("Maximum number of transactions per month",key = f"key{i+20}"))
+                    with right_column:
+                        base_perc.append(st.number_input("Percentage per transaction amount(in %)", key = f"key{i+50}"))
+                        base_perc_comp.append(st.number_input("Competitor Percentage per transaction amount(in %)", key = f"key{i+150}"))
             else:
                 st.error("Number of slabs can be from 1-5")
            
             postpaid_base_perc_button = st.button("Calculate Price", key="postpaid base perc")
 
+            aasaan_column, comp_column = st.columns(2)
             if postpaid_base_perc_button and aov_bperc:
                 postpaid_base_perc_obj = AasaanPostPaidBasePercCalculation(max_txn_perc, base_perc, base_perc_comp, aov_bperc, no_of_slabs)
                 postpaid_baseperc_pricing = postpaid_base_perc_obj.aasaan_postpaid_base_perc()
                 postpaid_baseperc_comp_pricing = postpaid_base_perc_obj.aasaan_postpaid_comp_base_perc()
-                st.metric("Aasaan", postpaid_baseperc_pricing)
-                if postpaid_baseperc_comp_pricing:
+                with aasaan_column:
+                    st.metric("Aasaan", postpaid_baseperc_pricing)
+                with comp_column:
                     st.metric("Competitor", postpaid_baseperc_comp_pricing)
 
-                monthly_txn_bperc = max(max_txn_perc)
-                
-                #Competitor Function Values   
-                if aov_bperc and monthly_txn_bperc:
-                    competitor_prices_bperc = comp_price_dict(monthly_txn_bperc, aov_bperc, selected_competitors)
+                    monthly_txn_bperc = max(max_txn_perc)
+                    
+                    #Competitor Function Values   
+                    if aov_bperc and monthly_txn_bperc:
+                        competitor_prices_bperc = comp_price_dict(monthly_txn_bperc, aov_bperc, selected_competitors)
 
-                for key in competitor_prices_bperc.keys():
-                    st.metric(key, competitor_prices_bperc[key])  
+                    for key in competitor_prices_bperc.keys():
+                        st.metric(key, competitor_prices_bperc[key])  
     else:
         st.empty()
 
