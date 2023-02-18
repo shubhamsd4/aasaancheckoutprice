@@ -150,7 +150,7 @@ def pricingModelSelector(monthly_txn, aov,txn_nature):
 
     elif aov>2500:
         if monthly_txn < 30000/12:
-            return "Prepaid"
+            return "Prepaid",0
         else:
             if txn_nature == "Constant": 
                 return "Postpaid Base Price",0
