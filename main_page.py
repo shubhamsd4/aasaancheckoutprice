@@ -27,7 +27,7 @@ def incr_rev_perc(revenue):
 def incr_rev(revenue, incr_rev_perc):
     return revenue*incr_rev_perc
 
-#ROI
+#breakeven
 def breakeven(aasaan_cost, incr_rev):
     roi = incr_rev/aasaan_cost
     return math.ceil(12/roi)
@@ -266,7 +266,7 @@ with st.container():
                 with aasaan_column:
                     st.metric("Aasaan",aasaan_prepaid(selected_subscription_plan))
                     st.metric("Aasaan Incremental Revenue", incr_revenue)
-                    #st.metric("Aasaan ROI", round(roi(aasaan_prepaid(selected_subscription_plan), incr_revenue),2))
+                    st.metric("Months to breakeven", breakeven(aasaan_prepaid(selected_subscription_plan), incr_revenue))
                 with comp_column:
                     for key in competitor_prices.keys():
                         st.metric(key, competitor_prices[key])
@@ -313,7 +313,7 @@ with st.container():
                 
                 with aasaan_column:
                     st.metric("Aasaan", postpaid_baseprice_pricing)
-                    #st.metric("Aasaan Incremental Revenue", incr_revenue_bprice)
+                    #st.metric("Months to breakeven", incr_revenue_bprice)
                 with comp_column:
                     st.metric("Competitor", postpaid_baseprice_comp_pricing)
                     #st.write(monthly_txn_bprice)
