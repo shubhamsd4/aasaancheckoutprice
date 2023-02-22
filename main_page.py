@@ -303,8 +303,6 @@ with st.container():
                 st.error("Number of slabs can be from 1-5")
             
            
-            
-
             aasaan_column, comp_column = st.columns(2)
             if postpaid_base_price_button:
                 postpaid_base_price_obj = AasaanPostPaidBasePriceCalculation(max_txn, base_price, base_price_comp, no_of_slabs)
@@ -313,7 +311,7 @@ with st.container():
                 
                 with aasaan_column:
                     st.metric("Aasaan", postpaid_baseprice_pricing)
-                    st.metric("Aasaan Incremental Revenue", incr_revenue_bprice)
+                    #st.metric("Aasaan Incremental Revenue", incr_revenue_bprice)
                 with comp_column:
                     st.metric("Competitor", postpaid_baseprice_comp_pricing)
                     #st.write(monthly_txn_bprice)
@@ -358,9 +356,7 @@ with st.container():
             else:
                 st.error("Number of slabs can be from 1-5")
            
-            est_revenue_bperc = est_yearly_revenue(max(max_txn_perc), float(aov_bprice))
-            incr_revenue_perc_bperc = incr_rev_perc(est_revenue_bperc)
-            incr_revenue_bperc = incr_rev(est_revenue_bperc, incr_revenue_perc_bperc)
+           
             
             postpaid_base_perc_button = st.button("Calculate Price", key="postpaid base perc")
 
@@ -371,7 +367,7 @@ with st.container():
                 postpaid_baseperc_comp_pricing = postpaid_base_perc_obj.aasaan_postpaid_comp_base_perc()
                 with aasaan_column:
                     st.metric("Aasaan", postpaid_baseperc_pricing)
-                    st.metric("Aasaan Incremental Revenue", incr_revenue_bperc)
+                    #st.metric("Aasaan Incremental Revenue", incr_revenue_bperc)
                 with comp_column:
                     st.metric("Competitor", postpaid_baseperc_comp_pricing)
 
