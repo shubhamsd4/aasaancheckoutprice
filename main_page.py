@@ -30,7 +30,7 @@ def incr_rev(revenue, incr_rev_perc):
 #breakeven
 def breakeven(aasaan_cost, incr_rev):
     roi = incr_rev/aasaan_cost
-    return math.ceil(12/roi)
+    return 12/roi
     
     
 #Prepaid Aasaan Price Calculation
