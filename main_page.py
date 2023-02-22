@@ -310,11 +310,7 @@ with st.container():
                 postpaid_base_price_obj = AasaanPostPaidBasePriceCalculation(max_txn, base_price, base_price_comp, no_of_slabs)
                 postpaid_baseprice_pricing = postpaid_base_price_obj.aasaan_postpaid_base_price()
                 postpaid_baseprice_comp_pricing = postpaid_base_price_obj.aasaan_postpaid_base_price_comp()
-                monthly_txn_bprice = max(max_txn)
-                est_revenue_bprice = est_yearly_revenue(monthly_txn_bprice, float(aov_bprice))
-                incr_revenue_perc_bprice = incr_rev_perc(est_revenue_bprice)
-                incr_revenue_bprice = incr_rev(est_revenue_bprice, incr_revenue_perc_bprice)    
-                postpaid_base_price_button = st.button("Calculate Price", key="postpaid base price")
+                
                 with aasaan_column:
                     st.metric("Aasaan", postpaid_baseprice_pricing)
                     st.metric("Aasaan Incremental Revenue", incr_revenue_bprice)
