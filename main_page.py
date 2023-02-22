@@ -7,6 +7,30 @@ st.set_page_config(page_title="Aasaan Checkout Price Calculator", page_icon=":ta
 #aasaan_logo = Image.open("../Images/aasaan_logo.png")
 
 #---Functions---
+#Estimated Yearly Revenue 
+def est_yearly_revenue(txn, AOV):
+    return txn*AOV*12
+
+#Incremental Revenue Percentage Estimation
+def incr_rev_perc(revenue):
+    if revenue < 500000:
+        return 0.30
+    elif revenue < 1000000:
+        return 0.20
+    elif revenue < 2500000:
+        return 0.10
+    else
+        return 0.05
+
+ #Incremental Revenue Estimation
+def incr_rev(revenue, incr_rev_perc):
+    return revenue*incr_rev_perc
+
+#ROI
+def roi(aasaan_cost, incr_rev):
+    return incr_rev/aasaan_cost
+    
+    
 #Prepaid Aasaan Price Calculation
 def aasaan_prepaid(plan):
     if plan == 'Quarterly':
@@ -222,7 +246,11 @@ with st.container():
                 aov = st.text_input("Avg. Order Value (in Rs.)", value=aov_check)
             with right_column:
                 monthly_txn = st.text_input("Avg. Transactions per Month", value = monthly_txn_check)
-
+            
+            est_revenue = est_yearly_revenue(int(monthly_txn), float(aov))
+            incr_revenue_perc = incr_rev_perc(est_revenue)
+            incr_revenue = incr_rev(est_revenue, incr_revenue_perc)
+            
             #Subscription Plan Dropdown 
             subscription_plans_options = ['Quarterly', 'Half-yearly', 'Yearly']
             selected_subscription_plan = st.selectbox("Select the Prepaid Subscription Type", subscription_plans_options, key='prepaid_sub_plan')
@@ -235,6 +263,8 @@ with st.container():
             if prepaid_button:
                 with aasaan_column:
                     st.metric("Aasaan",aasaan_prepaid(selected_subscription_plan))
+                    st.metric("Aasaan Incremental Revenue", incr_revenue)
+                    st.metric("Aasaan ROI", roi(aasaan_prepaid(selected_subscription_plan), incr_revenue))
                 with comp_column:
                     for key in competitor_prices.keys():
                         st.metric(key, competitor_prices[key])
