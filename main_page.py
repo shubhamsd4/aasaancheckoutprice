@@ -19,7 +19,7 @@ def incr_rev_perc(revenue):
         return 0.20
     elif revenue < 2500000:
         return 0.10
-    else
+    else:
         return 0.05
 
  #Incremental Revenue Estimation
