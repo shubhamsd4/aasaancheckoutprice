@@ -302,7 +302,7 @@ with st.container():
             else:
                 st.error("Number of slabs can be from 1-5")
                 
-            est_revenue_bprice = est_yearly_revenue(max(max_txn), float(aov_bprice))
+            est_revenue_bprice = est_yearly_revenue(100, float(aov_bprice))
             incr_revenue_perc_bprice = incr_rev_perc(est_revenue_bprice)
             incr_revenue_bprice = incr_rev(est_revenue_bprice, incr_revenue_perc_bprice)    
             postpaid_base_price_button = st.button("Calculate Price", key="postpaid base price")
