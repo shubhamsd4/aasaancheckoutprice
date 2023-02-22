@@ -1,6 +1,7 @@
 import streamlit as st
 from PIL import Image
 import pandas as pd
+import math
 st.set_page_config(page_title="Aasaan Checkout Price Calculator", page_icon=":tada:", layout="wide")
 
 #Load Assets
@@ -27,8 +28,9 @@ def incr_rev(revenue, incr_rev_perc):
     return revenue*incr_rev_perc
 
 #ROI
-def roi(aasaan_cost, incr_rev):
-    return incr_rev/aasaan_cost
+def breakeven(aasaan_cost, incr_rev):
+    roi = incr_rev/aasaan_cost
+    return math.ceil(12/roi)
     
     
 #Prepaid Aasaan Price Calculation
