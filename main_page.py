@@ -264,7 +264,7 @@ with st.container():
                 with aasaan_column:
                     st.metric("Aasaan",aasaan_prepaid(selected_subscription_plan))
                     st.metric("Aasaan Incremental Revenue", incr_revenue)
-                    st.metric("Aasaan ROI", roi(aasaan_prepaid(selected_subscription_plan), incr_revenue))
+                    st.metric("Aasaan ROI", round(roi(aasaan_prepaid(selected_subscription_plan), incr_revenue),2))
                 with comp_column:
                     for key in competitor_prices.keys():
                         st.metric(key, competitor_prices[key])
