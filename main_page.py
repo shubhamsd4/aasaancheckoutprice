@@ -283,7 +283,7 @@ with st.container():
                     st.metric("Months to breakeven", round(breakeven(aasaan_prepaid(selected_subscription_plan), incr_revenue_prepaid),2))
                 with comp_column:
                     for key in competitor_prices.keys():
-                        st.metric(key, competitor_prices[key])
+                        st.metric(key, convert_to_indian_currency(competitor_prices[key]))
     else:
         st.empty()
 
@@ -334,7 +334,7 @@ with st.container():
                     st.metric("Yearly Incremental Revenue", convert_to_indian_currency(incr_revenue_bprice))
                     st.metric("Months to breakeven", round(breakeven(postpaid_baseprice_pricing, incr_revenue_bprice),2))
                 with comp_column:
-                    st.metric("Competitor", postpaid_baseprice_comp_pricing)
+                    st.metric("Competitor", convert_to_indian_currency(postpaid_baseprice_comp_pricing))
 
                     
                     #st.write(monthly_txn_bprice)
@@ -396,7 +396,7 @@ with st.container():
                     st.metric("Yearly Incremental Revenue", convert_to_indian_currency(incr_revenue_bperc))
                     st.metric("Months to breakeven", round(breakeven(postpaid_baseperc_pricing, incr_revenue_bperc),2))
                 with comp_column:
-                    st.metric("Competitor", postpaid_baseperc_comp_pricing)
+                    st.metric("Competitor", convert_to_indian_currency(postpaid_baseperc_comp_pricing))
 
                     monthly_txn_bperc = max(max_txn_perc)
                     
