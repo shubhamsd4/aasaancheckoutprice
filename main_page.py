@@ -340,8 +340,8 @@ with st.container():
                 postpaid_baseprice_pricing = postpaid_base_price_obj.aasaan_postpaid_base_price()
                 postpaid_baseprice_comp_pricing = postpaid_base_price_obj.aasaan_postpaid_base_price_comp()
                 with aasaan_column:
-                    st.metric("Aasaan Yearly Cost", postpaid_baseprice_pricing)
-                    st.metric("Yearly Incremental Revenue", incr_revenue_bprice)
+                    st.metric("Aasaan Yearly Cost", convert_to_indian_currency(postpaid_baseprice_pricing))
+                    st.metric("Yearly Incremental Revenue", convert_to_indian_currency(incr_revenue_bprice))
                     st.metric("Months to breakeven", round(breakeven(postpaid_baseprice_pricing, incr_revenue_bprice),2))
                 with comp_column:
                     st.metric("Competitor", postpaid_baseprice_comp_pricing)
@@ -354,7 +354,7 @@ with st.container():
 
 
                     for key in competitor_prices.keys():
-                        st.metric(key, competitor_prices[key])
+                        st.metric(key, convert_to_indian_currency(competitor_prices[key]))
     else:
         st.empty()
                 
@@ -402,8 +402,8 @@ with st.container():
                 postpaid_baseperc_pricing = postpaid_base_perc_obj.aasaan_postpaid_base_perc()
                 postpaid_baseperc_comp_pricing = postpaid_base_perc_obj.aasaan_postpaid_comp_base_perc()
                 with aasaan_column:
-                    st.metric("Aasaan Yearly Cost", postpaid_baseperc_pricing)
-                    st.metric("Yearly Incremental Revenue", incr_revenue_bperc)
+                    st.metric("Aasaan Yearly Cost", convert_to_indian_currency(postpaid_baseperc_pricing))
+                    st.metric("Yearly Incremental Revenue", convert_to_indian_currency(incr_revenue_bperc))
                     st.metric("Months to breakeven", round(breakeven(postpaid_baseperc_pricing, incr_revenue_bperc),2))
                 with comp_column:
                     st.metric("Competitor", postpaid_baseperc_comp_pricing)
@@ -415,7 +415,7 @@ with st.container():
                         competitor_prices_bperc = comp_price_dict(monthly_txn_bperc, aov_bperc, selected_competitors)
 
                     for key in competitor_prices_bperc.keys():
-                        st.metric(key, competitor_prices_bperc[key])  
+                        st.metric(key, convert_to_indian_currency(competitor_prices_bperc[key])) 
     else:
         st.empty()
 
