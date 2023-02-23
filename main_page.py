@@ -1,38 +1,38 @@
 import streamlit as st
 from PIL import Image
 import pandas as pd
-import math
 st.set_page_config(page_title="Aasaan Checkout Price Calculator", page_icon=":tada:", layout="wide")
 
 #Load Assets
 #aasaan_logo = Image.open("../Images/aasaan_logo.png")
 
 #---Functions---
-#Estimated Yearly Revenue 
+#Estimated Yearly Revenue 
 def est_yearly_revenue(txn, AOV):
     return txn*AOV*12
 
 #Incremental Revenue Percentage Estimation
 def incr_rev_perc(revenue):
-    if revenue < 500000:
+    if revenue<500000:
         return 0.30
-    elif revenue < 1000000:
+    elif revenue<1000000:
         return 0.20
-    elif revenue < 2500000:
+    elif revenue<2500000:
         return 0.10
     else:
         return 0.05
 
- #Incremental Revenue Estimation
+#Incremental Revenue Estimation
 def incr_rev(revenue, incr_rev_perc):
     return revenue*incr_rev_perc
 
-#breakeven
+#Months to breakeven
 def breakeven(aasaan_cost, incr_rev):
     roi = incr_rev/aasaan_cost
     return 12/roi
-    
-    
+
+
+
 #Prepaid Aasaan Price Calculation
 def aasaan_prepaid(plan):
     if plan == 'Quarterly':
@@ -203,6 +203,9 @@ with st.container():
         3. Input the pricing details of the pricing model suggested
         """)
 
+st.write('<style>.my-input { width: 300px; }</style>', unsafe_allow_html=True)
+
+
 #--Choose Competitor ---
 with st.container():
     st.write("---")
@@ -221,10 +224,10 @@ with st.container():
     #Taking the inputs aov,  txn and distribution details for comp. benchmarking
     left_column, right_column = st.columns(2)
     with left_column:
-        aov_check = st.text_input("Avg. Order Value (in Rs.)", key="check")
+        aov_check = st.text_input("Avg. Order Value (in Rs.)", key='my_input')
     
     with right_column:
-        monthly_txn_check= st.text_input("Avg. Transactions per Month", key="check txn")
+        monthly_txn_check= st.text_input("Avg. Transactions per Month", key='my_input1')
 
     txn_nature = st.radio("Select the nature of the monthly transactions over the year", ["Constant", "Fluctuating"], key="txn_nature_key")
 
@@ -248,11 +251,12 @@ with st.container():
                 aov = st.text_input("Avg. Order Value (in Rs.)", value=aov_check)
             with right_column:
                 monthly_txn = st.text_input("Avg. Transactions per Month", value = monthly_txn_check)
-            
-            est_revenue = est_yearly_revenue(int(monthly_txn), float(aov))
-            incr_revenue_perc = incr_rev_perc(est_revenue)
-            incr_revenue = incr_rev(est_revenue, incr_revenue_perc)
-            
+
+            est_revenue_prepaid = est_yearly_revenue(int(monthly_txn), float(aov)) 
+            incr_revenue_perc_prepaid = incr_rev_perc(est_revenue_prepaid)
+            incr_revenue_prepaid = incr_rev(est_revenue_prepaid, incr_revenue_perc_prepaid) 
+
+
             #Subscription Plan Dropdown 
             subscription_plans_options = ['Quarterly', 'Half-yearly', 'Yearly']
             selected_subscription_plan = st.selectbox("Select the Prepaid Subscription Type", subscription_plans_options, key='prepaid_sub_plan')
@@ -265,8 +269,8 @@ with st.container():
             if prepaid_button:
                 with aasaan_column:
                     st.metric("Aasaan",aasaan_prepaid(selected_subscription_plan))
-                    st.metric("Aasaan Incremental Revenue", incr_revenue)
-                    st.metric("Months to breakeven", breakeven(aasaan_prepaid(selected_subscription_plan), incr_revenue))
+                    st.metric("Yearly Incremental Revenue", incr_revenue_prepaid)
+                    st.metric("Months to breakeven", round(breakeven(aasaan_prepaid(selected_subscription_plan), incr_revenue_prepaid),2))
                 with comp_column:
                     for key in competitor_prices.keys():
                         st.metric(key, competitor_prices[key])
@@ -303,19 +307,26 @@ with st.container():
                         base_price_comp.append(st.number_input("Competitor Price per transaction(in Rs.)", key = f"key{i+100}"))
             else:
                 st.error("Number of slabs can be from 1-5")
-            
-           
+            postpaid_base_price_button = st.button("Calculate Price", key="postpaid base price")
+
             aasaan_column, comp_column = st.columns(2)
             if postpaid_base_price_button:
+                monthly_txn_bprice = max(max_txn)
+                est_revenue_bprice = est_yearly_revenue(int(monthly_txn_bprice), float(aov_bprice)) 
+                incr_revenue_perc_bprice = incr_rev_perc(est_revenue_bprice)
+                incr_revenue_bprice = incr_rev(est_revenue_bprice, incr_revenue_perc_bprice)
+
                 postpaid_base_price_obj = AasaanPostPaidBasePriceCalculation(max_txn, base_price, base_price_comp, no_of_slabs)
                 postpaid_baseprice_pricing = postpaid_base_price_obj.aasaan_postpaid_base_price()
                 postpaid_baseprice_comp_pricing = postpaid_base_price_obj.aasaan_postpaid_base_price_comp()
-                
                 with aasaan_column:
                     st.metric("Aasaan", postpaid_baseprice_pricing)
-                    #st.metric("Months to breakeven", incr_revenue_bprice)
+                    st.metric("Yearly Incremental Revenue", incr_revenue_bprice)
+                    st.metric("Months to breakeven", round(breakeven(postpaid_baseprice_pricing, incr_revenue_bprice),2))
                 with comp_column:
                     st.metric("Competitor", postpaid_baseprice_comp_pricing)
+
+                    
                     #st.write(monthly_txn_bprice)
                     #Competitor Function Values   
                     if aov_bprice and monthly_txn_bprice:
@@ -358,18 +369,22 @@ with st.container():
             else:
                 st.error("Number of slabs can be from 1-5")
            
-           
-            
             postpaid_base_perc_button = st.button("Calculate Price", key="postpaid base perc")
 
             aasaan_column, comp_column = st.columns(2)
             if postpaid_base_perc_button and aov_bperc:
+                monthly_txn_bperc = max(max_txn_perc)
+                est_revenue_bperc = est_yearly_revenue(int(monthly_txn_bperc), float(aov_bperc)) 
+                incr_revenue_perc_bperc = incr_rev_perc(est_revenue_bperc)
+                incr_revenue_bperc = incr_rev(est_revenue_bperc, incr_revenue_perc_bperc)
+
                 postpaid_base_perc_obj = AasaanPostPaidBasePercCalculation(max_txn_perc, base_perc, base_perc_comp, aov_bperc, no_of_slabs)
                 postpaid_baseperc_pricing = postpaid_base_perc_obj.aasaan_postpaid_base_perc()
                 postpaid_baseperc_comp_pricing = postpaid_base_perc_obj.aasaan_postpaid_comp_base_perc()
                 with aasaan_column:
                     st.metric("Aasaan", postpaid_baseperc_pricing)
-                    #st.metric("Aasaan Incremental Revenue", incr_revenue_bperc)
+                    st.metric("Yearly Incremental Revenue", incr_revenue_bperc)
+                    st.metric("Months to breakeven", round(breakeven(postpaid_baseperc_pricing, incr_revenue_bperc),2))
                 with comp_column:
                     st.metric("Competitor", postpaid_baseperc_comp_pricing)
 
