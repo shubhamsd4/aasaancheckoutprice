@@ -210,7 +210,7 @@ with st.container():
         """
         1. Choose the competitors you want to compare against
         2. Ask our prospective merchants what their Avg. Order Value, their monthly transactions and nature of their transactions
-        3. Input the pricing details of the pricing model suggested
+        3. Input the pricing details on the basis of the pricing model suggested
         """)
 
 st.write('<style>.my-input { width: 300px; }</style>', unsafe_allow_html=True)
