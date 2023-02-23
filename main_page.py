@@ -268,7 +268,7 @@ with st.container():
             aasaan_column, comp_column = st.columns(2)
             if prepaid_button:
                 with aasaan_column:
-                    st.metric("Aasaan",aasaan_prepaid(selected_subscription_plan))
+                    st.metric("Aasaan Yearly Cost",aasaan_prepaid(selected_subscription_plan))
                     st.metric("Yearly Incremental Revenue", incr_revenue_prepaid)
                     st.metric("Months to breakeven", round(breakeven(aasaan_prepaid(selected_subscription_plan), incr_revenue_prepaid),2))
                 with comp_column:
@@ -320,7 +320,7 @@ with st.container():
                 postpaid_baseprice_pricing = postpaid_base_price_obj.aasaan_postpaid_base_price()
                 postpaid_baseprice_comp_pricing = postpaid_base_price_obj.aasaan_postpaid_base_price_comp()
                 with aasaan_column:
-                    st.metric("Aasaan", postpaid_baseprice_pricing)
+                    st.metric("Aasaan Yearly Cost", postpaid_baseprice_pricing)
                     st.metric("Yearly Incremental Revenue", incr_revenue_bprice)
                     st.metric("Months to breakeven", round(breakeven(postpaid_baseprice_pricing, incr_revenue_bprice),2))
                 with comp_column:
@@ -382,7 +382,7 @@ with st.container():
                 postpaid_baseperc_pricing = postpaid_base_perc_obj.aasaan_postpaid_base_perc()
                 postpaid_baseperc_comp_pricing = postpaid_base_perc_obj.aasaan_postpaid_comp_base_perc()
                 with aasaan_column:
-                    st.metric("Aasaan", postpaid_baseperc_pricing)
+                    st.metric("Aasaan Yearly Cost", postpaid_baseperc_pricing)
                     st.metric("Yearly Incremental Revenue", incr_revenue_bperc)
                     st.metric("Months to breakeven", round(breakeven(postpaid_baseperc_pricing, incr_revenue_bperc),2))
                 with comp_column:
