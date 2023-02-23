@@ -1,6 +1,7 @@
 import streamlit as st
 from PIL import Image
 import pandas as pd
+import locale
 st.set_page_config(page_title="Aasaan Checkout Price Calculator", page_icon=":tada:", layout="wide")
 
 #Load Assets
@@ -11,21 +12,18 @@ st.set_page_config(page_title="Aasaan Checkout Price Calculator", page_icon=":ta
 def convert_to_indian_currency(num):
     # Convert number to a string with 2 decimal places
     num_str = '{:.2f}'.format(num)
-
+    
     # Split the string into rupees and paise parts
     rupees, paise = num_str.split('.')
-
-    # Add commas after every two digits, starting from the end of the rupees string
+    
+    # Add commas to the rupees part for every 3 digits
     rupees = rupees[::-1]
-    rupees = ','.join([rupees[i:i+2] for i in range(0, len(rupees), 2)])
+    rupees = ','.join([rupees[i:i+3] for i in range(0, len(rupees), 3)])
     rupees = rupees[::-1]
-
-    # Add comma before last three digits of rupees
-    rupees = rupees[:-3] + ',' + rupees[-3:]
-
+    
     # Combine the rupees and paise parts with the currency symbol
     indian_num = '₹' + rupees + '.' + paise
-
+    
     return indian_num
 
 
