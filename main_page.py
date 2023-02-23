@@ -4,6 +4,9 @@ import pandas as pd
 import locale
 st.set_page_config(page_title="Aasaan Checkout Price Calculator", page_icon=":tada:", layout="wide")
 
+locale.setlocale(locale.LC_MONETARY, 'en_IN')
+
+
 #Load Assets
 #aasaan_logo = Image.open("../Images/aasaan_logo.png")
 
