@@ -7,6 +7,26 @@ st.set_page_config(page_title="Aasaan Checkout Price Calculator", page_icon=":ta
 #aasaan_logo = Image.open("../Images/aasaan_logo.png")
 
 #---Functions---
+#Indian format
+def convert_to_indian_currency(num):
+    # Convert number to a string with 2 decimal places
+    num_str = '{:.2f}'.format(num)
+    
+    # Split the string into rupees and paise parts
+    rupees, paise = num_str.split('.')
+    
+    # Add commas to the rupees part for every 3 digits
+    rupees = rupees[::-1]
+    rupees = ','.join([rupees[i:i+3] for i in range(0, len(rupees), 3)])
+    rupees = rupees[::-1]
+    
+    # Combine the rupees and paise parts with the currency symbol
+    indian_num = '₹' + rupees + '.' + paise
+    
+    return indian_num
+
+
+
 #Estimated Yearly Revenue 
 def est_yearly_revenue(txn, AOV):
     return txn*AOV*12
@@ -268,8 +288,8 @@ with st.container():
             aasaan_column, comp_column = st.columns(2)
             if prepaid_button:
                 with aasaan_column:
-                    st.metric("Aasaan Yearly Cost",aasaan_prepaid(selected_subscription_plan))
-                    st.metric("Yearly Incremental Revenue", incr_revenue_prepaid)
+                    st.metric("Aasaan Yearly Cost",convert_to_indian_currency(aasaan_prepaid(selected_subscription_plan)))
+                    st.metric("Yearly Incremental Revenue", convert_to_indian_currency(incr_revenue_prepaid))
                     st.metric("Months to breakeven", round(breakeven(aasaan_prepaid(selected_subscription_plan), incr_revenue_prepaid),2))
                 with comp_column:
                     for key in competitor_prices.keys():
