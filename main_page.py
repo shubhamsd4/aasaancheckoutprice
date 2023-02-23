@@ -1,10 +1,9 @@
 import streamlit as st
 from PIL import Image
 import pandas as pd
-import locale
+
 st.set_page_config(page_title="Aasaan Checkout Price Calculator", page_icon=":tada:", layout="wide")
 
-locale.setlocale(locale.LC_MONETARY, 'en_IN')
 
 
 #Load Assets
@@ -12,23 +11,10 @@ locale.setlocale(locale.LC_MONETARY, 'en_IN')
 
 #---Functions---
 #Indian format
-def convert_to_indian_currency(num):
-    # Convert number to a string with 2 decimal places
-    num_str = '{:.2f}'.format(num)
-    
-    # Split the string into rupees and paise parts
-    rupees, paise = num_str.split('.')
-    
-    # Add commas to the rupees part for every 3 digits
-    rupees = rupees[::-1]
-    rupees = ','.join([rupees[i:i+3] for i in range(0, len(rupees), 3)])
-    rupees = rupees[::-1]
-    
-    # Combine the rupees and paise parts with the currency symbol
-    indian_num = '₹' + rupees + '.' + paise
-    
-    return indian_num
-
+def convert_to_indian_currency(number):
+    s, *d = str(number).partition(".")
+    r = ",".join([s[x-2:x] for x in range(-3, -len(s), -2)][::-1] + [s[-3:]])
+    return '₹' + "".join([r] + d)
 
 
 #Estimated Yearly Revenue 
