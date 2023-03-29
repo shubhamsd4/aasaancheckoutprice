@@ -158,7 +158,7 @@ def comp_price_dict(monthly_txn, aov,selected_competitors):
 
 def pricingModelSelector(monthly_txn, aov,txn_nature):
     if aov<=1000:
-        if monthly_txn*aov*0.25*0.01 <=48750:
+        if monthly_txn*aov*0.25*0.01*12 <=35000:
             return "Prepaid",0
         else:
             if txn_nature == "Constant": 
@@ -167,7 +167,7 @@ def pricingModelSelector(monthly_txn, aov,txn_nature):
                 return "Postpaid Base Percentage",1
 
     else aov>1000:
-        if monthly_txn*1.75 <=48750:
+        if monthly_txn*1.75*12 <=35000:
             return "Prepaid",0
         else:
             if txn_nature == "Constant": 
