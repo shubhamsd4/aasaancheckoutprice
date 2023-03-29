@@ -166,7 +166,7 @@ def pricingModelSelector(monthly_txn, aov,txn_nature):
             else:
                 return "Postpaid Base Percentage",1
 
-    else aov>1000:
+    else:
         if monthly_txn*1.75*12 <=35000:
             return "Prepaid",0
         else:
