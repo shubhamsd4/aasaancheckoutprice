@@ -396,5 +396,6 @@ if country_dropdown == 'India':
 
 if country == 'UAE':
     st.write('Hello World')
+    st.button("Get Slabs")
         
 
