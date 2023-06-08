@@ -394,7 +394,6 @@ if country_dropdown == 'India':
         else:
             st.empty()
 
-    if country_dropdown == 'UAE':
-        st.write('Hello')
+         
         
 
