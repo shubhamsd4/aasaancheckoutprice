@@ -5,7 +5,6 @@ import pandas as pd
 st.set_page_config(page_title="Aasaan Checkout Price Calculator", page_icon=":tada:", layout="wide")
 
 
-
 #Load Assets
 #aasaan_logo = Image.open("../Images/aasaan_logo.png")
 
@@ -40,8 +39,6 @@ def incr_rev(revenue, incr_rev_perc):
 def breakeven(aasaan_cost, incr_rev):
     roi = incr_rev/aasaan_cost
     return 12/roi
-
-
 
 #Prepaid Aasaan Price Calculation
 def aasaan_prepaid(plan):
@@ -198,6 +195,8 @@ with st.container():
 
 st.write('<style>.my-input { width: 300px; }</style>', unsafe_allow_html=True)
 
+#--Checkbox for UAE-- 
+uae = st.checkbox('Is UAE') 
 
 #--Choose Competitor ---
 with st.container():
