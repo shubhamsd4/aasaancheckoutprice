@@ -2,7 +2,7 @@ import streamlit as st
 from PIL import Image
 import pandas as pd
 
-st.set_page_config(page_title="Aasaan Checkout Price Calculator", page_icon=":tada:", layout="wide")
+st.set_page_config(page_title="Price Calculator", page_icon=":tada:", layout="wide")
 
 
 #Load Assets
