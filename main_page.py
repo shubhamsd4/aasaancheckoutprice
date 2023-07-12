@@ -170,7 +170,7 @@ def comp_price_dict(monthly_txn, aov,selected_competitors):
     return competitor_prices
 
 def pricingModelSelector(monthly_txn, aov,txn_nature):
-    if aov<=1000:
+    if aov<=2000:
         if monthly_txn*aov*0.25*0.01*12 <=35000:
             return "Prepaid",0
         else:
