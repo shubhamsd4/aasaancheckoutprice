@@ -17,7 +17,7 @@ def convert_to_indian_currency(number):
 
 #UAE Format
 def convert_to_uae_currency(number):
-    return 'AED' + str(number)
+    return 'AED' + str( number)
 
 
 #Estimated Yearly Revenue 
@@ -475,8 +475,8 @@ if country_dropdown == 'UAE':
                 prepaid_button = st.button("Calculate Price")
 
                 if prepaid_button:
-                    st.metric("Aasaan Yearly Cost",UAEaasaan_prepaid(selected_subscription_plan))
-                    st.metric("Yearly Incremental Revenue", incr_revenue_prepaid)
+                    st.metric("Aasaan Yearly Cost",convert_to_uae_currency(UAEaasaan_prepaid(selected_subscription_plan)))
+                    st.metric("Yearly Incremental Revenue", convert_to_uae_currency(incr_revenue_prepaid))
                     st.metric("Months to breakeven", round(breakeven(aasaan_prepaid(selected_subscription_plan), incr_revenue_prepaid),2))
                    
         else:
@@ -525,10 +525,10 @@ if country_dropdown == 'UAE':
                     postpaid_baseprice_comp_pricing = postpaid_base_price_obj.aasaan_postpaid_base_price_comp()
                     with aasaan_column:
                         st.metric("Aasaan Yearly Cost", convert_to_uae_currency(postpaid_baseprice_pricing))
-                        st.metric("Yearly Incremental Revenue", incr_revenue_bprice)
+                        st.metric("Yearly Incremental Revenue", convert_to_uae_currency(incr_revenue_bprice))
                         st.metric("Months to breakeven", round(breakeven(postpaid_baseprice_pricing, incr_revenue_bprice),2))
                     with comp_column:
-                        st.metric("Competitor", postpaid_baseprice_comp_pricing)
+                        st.metric("Competitor", convert_to_uae_currency(postpaid_baseprice_comp_pricing))
         else:
             st.empty()
 
