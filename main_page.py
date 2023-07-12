@@ -17,7 +17,7 @@ def convert_to_indian_currency(number):
 
 #UAE Format
 def convert_to_uae_currency(number):
-    return 'AED' + str( number)
+    return 'AED' + ' ' + str( number)
 
 
 #Estimated Yearly Revenue 
@@ -543,7 +543,7 @@ if country_dropdown == 'UAE':
             else:
                 st.write("Non-Tiered")
                 no_of_slabs = 1
-            aov_bperc = st.text_input("Avg. Order Value (in Rs.)", value=aov_check, key="AOV base percentage")
+            aov_bperc = st.text_input("Avg. Order Value (in AED)", value=aov_check, key="AOV base percentage")
             max_txn_perc = []
             base_perc=[]
             base_perc_comp = []
@@ -569,27 +569,20 @@ if country_dropdown == 'UAE':
                 if postpaid_base_perc_button and aov_bperc:
                     monthly_txn_bperc = max(max_txn_perc)
                     est_revenue_bperc = est_yearly_revenue(int(monthly_txn_bperc), float(aov_bperc)) 
-                    incr_revenue_perc_bperc = incr_rev_perc(est_revenue_bperc)
+                    incr_revenue_perc_bperc = UAEincr_rev_perc(est_revenue_bperc)
                     incr_revenue_bperc = incr_rev(est_revenue_bperc, incr_revenue_perc_bperc)
 
                     postpaid_base_perc_obj = AasaanPostPaidBasePercCalculation(max_txn_perc, base_perc, base_perc_comp, aov_bperc, no_of_slabs)
                     postpaid_baseperc_pricing = postpaid_base_perc_obj.aasaan_postpaid_base_perc()
                     postpaid_baseperc_comp_pricing = postpaid_base_perc_obj.aasaan_postpaid_comp_base_perc()
                     with aasaan_column:
-                        st.metric("Aasaan Yearly Cost", convert_to_indian_currency(postpaid_baseperc_pricing))
-                        st.metric("Yearly Incremental Revenue", convert_to_indian_currency(incr_revenue_bperc))
+                        st.metric("Aasaan Yearly Cost", convert_to_uae_currency(postpaid_baseperc_pricing))
+                        st.metric("Yearly Incremental Revenue", convert_to_uae_currency(incr_revenue_bperc))
                         st.metric("Months to breakeven", round(breakeven(postpaid_baseperc_pricing, incr_revenue_bperc),2))
                     with comp_column:
-                        st.metric("Competitor", convert_to_indian_currency(postpaid_baseperc_comp_pricing))
+                        st.metric("Competitor", convert_to_uae_currency(postpaid_baseperc_comp_pricing))
 
                         monthly_txn_bperc = max(max_txn_perc)
-
-                        #Competitor Function Values   
-                        if aov_bperc and monthly_txn_bperc:
-                            competitor_prices_bperc = comp_price_dict(monthly_txn_bperc, aov_bperc, selected_competitors)
-
-                        for key in competitor_prices_bperc.keys():
-                            st.metric(key, convert_to_indian_currency(competitor_prices_bperc[key])) 
         else:
             st.empty()
 
