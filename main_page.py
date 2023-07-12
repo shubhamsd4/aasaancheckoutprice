@@ -31,6 +31,9 @@ def incr_rev_perc(revenue):
     else:
         return 0.05
 
+def UAEincr_rev_perc(revenue):
+    return 0.05
+
 #Incremental Revenue Estimation
 def incr_rev(revenue, incr_rev_perc):
     return revenue*incr_rev_perc
@@ -48,6 +51,15 @@ def aasaan_prepaid(plan):
         return 50000
     elif plan=="Yearly":
         return 35000
+
+def UAEaasaan_prepaid(plan):
+    if plan == 'Quarterly':
+        return 4400
+    elif plan =="Half-yearly":
+        return 3600
+    elif plan=="Yearly":
+        return 2700
+
 
 #Postpaid Aasaan Base Percentage Price Calculation
 class AasaanPostPaidBasePriceCalculation:
@@ -444,12 +456,12 @@ if country_dropdown == 'UAE':
                 #Taking the inputs aov and txn details for comp. benchmarking
                 left_column, right_column = st.columns(2)
                 with left_column:
-                    aov = st.text_input("Avg. Order Value (in Rs.)", value=aov_check)
+                    aov = st.text_input("Avg. Order Value (in AED)", value=aov_check)
                 with right_column:
                     monthly_txn = st.text_input("Avg. Transactions per Month", value = monthly_txn_check)
 
                 est_revenue_prepaid = est_yearly_revenue(int(monthly_txn), float(aov)) 
-                incr_revenue_perc_prepaid = incr_rev_perc(est_revenue_prepaid)
+                incr_revenue_perc_prepaid = UAEincr_rev_perc(est_revenue_prepaid)
                 incr_revenue_prepaid = incr_rev(est_revenue_prepaid, incr_revenue_perc_prepaid) 
 
 
@@ -458,18 +470,11 @@ if country_dropdown == 'UAE':
                 selected_subscription_plan = st.selectbox("Select the Prepaid Subscription Type", subscription_plans_options, key='prepaid_sub_plan')
                 prepaid_button = st.button("Calculate Price")
 
-                #Competitor Function Values   
-                if aov and monthly_txn:
-                    competitor_prices = comp_price_dict(monthly_txn, aov,selected_competitors)
-                aasaan_column, comp_column = st.columns(2)
                 if prepaid_button:
-                    with aasaan_column:
-                        st.metric("Aasaan Yearly Cost",convert_to_indian_currency(aasaan_prepaid(selected_subscription_plan)))
-                        st.metric("Yearly Incremental Revenue", convert_to_indian_currency(incr_revenue_prepaid))
-                        st.metric("Months to breakeven", round(breakeven(aasaan_prepaid(selected_subscription_plan), incr_revenue_prepaid),2))
-                    with comp_column:
-                        for key in competitor_prices.keys():
-                            st.metric(key, convert_to_indian_currency(competitor_prices[key]))
+                    st.metric("Aasaan Yearly Cost",UAEaasaan_prepaid(selected_subscription_plan))
+                    st.metric("Yearly Incremental Revenue", convert_to_indian_currency(incr_revenue_prepaid))
+                    st.metric("Months to breakeven", round(breakeven(aasaan_prepaid(selected_subscription_plan), incr_revenue_prepaid),2))
+                   
         else:
             st.empty()
 
