@@ -234,7 +234,7 @@ if country_dropdown == 'India':
     #--Choose Competitor ---
     with st.container():
         st.write("---")
-        st.subheader("Competitor Comparision11")
+        st.subheader("Competitor Comparision")
         competitor_names = ['GoKwik', 'Shopflo','Xpresslane','Nimbl']
         selected_competitors = st.multiselect("Select Competitors to compare with", competitor_names)
         #update_competitor = st.button("Update Competitors")
