@@ -190,7 +190,7 @@ def pricingModelSelector(monthly_txn, aov,txn_nature):
 
 def UAEpricingModelSelector(monthly_txn, aov,txn_nature):
     if aov<=400:
-        if monthly_txn*aov*0.61*0.01*12 <=60000:
+        if monthly_txn*aov*0.61*0.01*12 <=2700:
             return "Prepaid",0
         else:
             if txn_nature == "Constant": 
@@ -199,7 +199,7 @@ def UAEpricingModelSelector(monthly_txn, aov,txn_nature):
                 return "Postpaid Base Percentage",1
 
     else:
-        if monthly_txn*0.64*12 <=60000:
+        if monthly_txn*0.64*12 <=2700:
             return "Prepaid",0
         else:
             if txn_nature == "Constant": 
