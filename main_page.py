@@ -196,7 +196,7 @@ with st.container():
 st.write('<style>.my-input { width: 300px; }</style>', unsafe_allow_html=True)
 
 #--Checkbox for UAE-- 
-st.subheader("Select the below checkbox for UAE clients")
+st.subheader("Select the Merchant's country of operations ")
 country =['India','UAE']
 country_dropdown = st.selectbox("Select Target Region", country)
 
