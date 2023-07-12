@@ -472,7 +472,7 @@ if country_dropdown == 'UAE':
 
                 if prepaid_button:
                     st.metric("Aasaan Yearly Cost",UAEaasaan_prepaid(selected_subscription_plan))
-                    st.metric("Yearly Incremental Revenue", convert_to_indian_currency(incr_revenue_prepaid))
+                    #st.metric("Yearly Incremental Revenue", convert_to_indian_currency(incr_revenue_prepaid))
                     st.metric("Months to breakeven", round(breakeven(aasaan_prepaid(selected_subscription_plan), incr_revenue_prepaid),2))
                    
         else:
