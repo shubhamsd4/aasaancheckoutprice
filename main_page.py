@@ -395,7 +395,27 @@ if country_dropdown == 'India':
             st.empty()
 
 if country_dropdown == 'UAE':
-    st.write("Hello World")
-    st.button("Get Slabs")
+    #--Pricing Model Selector---
+    with st.container():
+        st.write("---")
+        st.subheader("Pricing Model Selector")  
+
+        #Taking the inputs aov,  txn and distribution details for comp. benchmarking
+        left_column, right_column = st.columns(2)
+        with left_column:
+            aov_check = st.text_input("Avg. Order Value (in AED)", key='my_input')
+
+        with right_column:
+            monthly_txn_check= st.text_input("Avg. Transactions per Month", key='my_input1')
+
+        txn_nature = st.radio("Select the nature of the monthly transactions over the year", ["Constant", "Fluctuating"], key="txn_nature_key")
+
+        if aov_check and monthly_txn_check:
+            priceModule,isTiered = pricingModelSelector(int(monthly_txn_check), float(aov_check),txn_nature)
+        else:
+            priceModule = 0
+
+        getPricingModel = st.button("Get Pricing Model", key="getPMButton")
+
         
 
