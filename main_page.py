@@ -473,7 +473,126 @@ if country_dropdown == 'UAE':
         else:
             st.empty()
 
+    #---Postpaid Base Price---
+        if priceModule == "Postpaid Base Price":    
+            st.subheader("Postpaid Pricing Model: Base Price")
+            if isTiered:
+                st.write("Tiered")
+                no_of_slabs = st.text_input("Enter number of slabs")
+                st.button("Get Slabs")
+            else:
+                st.write("Non-Tiered")
+                no_of_slabs = 1
+            aov_bprice = st.text_input("Avg. Order Value (in Rs.)", value=aov_check, key="AOV base price")
+            max_txn = []
+            base_price=[]
+            base_price_comp = []
+            left_column, right_column = st.columns(2)
+            if no_of_slabs:
+                if int(no_of_slabs)<=5 and int(no_of_slabs)>0:
+                    for i in range(int(no_of_slabs)):
+                        with left_column:
+                            st.text(f"Slab {i+1}")
+                            if no_of_slabs ==1:
+                                max_txn.append(st.text_input("Maximum number of transactions per month",value= monthly_txn_check, key = f"key{i}"))
+                            else:
+                                max_txn.append(st.text_input("Maximum number of transactions per month",key = f"key{i}"))
+                        with right_column:
+                            base_price.append(st.number_input("Price per transaction(in Rs.)", key = f"key{i+10}"))
+                            base_price_comp.append(st.number_input("Competitor Price per transaction(in Rs.)", key = f"key{i+100}"))
+                else:
+                    st.error("Number of slabs can be from 1-5")
+                postpaid_base_price_button = st.button("Calculate Price", key="postpaid base price")
 
+                aasaan_column, comp_column = st.columns(2)
+                if postpaid_base_price_button:
+                    monthly_txn_bprice = max(max_txn)
+                    est_revenue_bprice = est_yearly_revenue(int(monthly_txn_bprice), float(aov_bprice)) 
+                    incr_revenue_perc_bprice = incr_rev_perc(est_revenue_bprice)
+                    incr_revenue_bprice = incr_rev(est_revenue_bprice, incr_revenue_perc_bprice)
+
+                    postpaid_base_price_obj = AasaanPostPaidBasePriceCalculation(max_txn, base_price, base_price_comp, no_of_slabs)
+                    postpaid_baseprice_pricing = postpaid_base_price_obj.aasaan_postpaid_base_price()
+                    postpaid_baseprice_comp_pricing = postpaid_base_price_obj.aasaan_postpaid_base_price_comp()
+                    with aasaan_column:
+                        st.metric("Aasaan Yearly Cost", convert_to_indian_currency(postpaid_baseprice_pricing))
+                        st.metric("Yearly Incremental Revenue", convert_to_indian_currency(incr_revenue_bprice))
+                        st.metric("Months to breakeven", round(breakeven(postpaid_baseprice_pricing, incr_revenue_bprice),2))
+                    with comp_column:
+                        st.metric("Competitor", convert_to_indian_currency(postpaid_baseprice_comp_pricing))
+
+
+                        #st.write(monthly_txn_bprice)
+                        #Competitor Function Values   
+                        if aov_bprice and monthly_txn_bprice:
+                            competitor_prices = comp_price_dict(monthly_txn_bprice, aov_bprice,selected_competitors)
+
+
+                        for key in competitor_prices.keys():
+                            st.metric(key, convert_to_indian_currency(competitor_prices[key]))
+        else:
+            st.empty()
+
+    #---Postpaid Base Percentage---
+
+        if priceModule =="Postpaid Base Percentage":    
+            st.subheader("Postpaid Pricing Model: Base Percentage")
+            if isTiered:
+                st.write("Tiered")
+                no_of_slabs = st.text_input("Enter number of slabs", key="base percentage")
+                st.button("Get Slabs", key="base_perc_key")
+            else:
+                st.write("Non-Tiered")
+                no_of_slabs = 1
+            aov_bperc = st.text_input("Avg. Order Value (in Rs.)", value=aov_check, key="AOV base percentage")
+            max_txn_perc = []
+            base_perc=[]
+            base_perc_comp = []
+            left_column, right_column = st.columns(2)
+            if no_of_slabs:
+                if int(no_of_slabs)<=5 and int(no_of_slabs)>0:
+                    for i in range(int(no_of_slabs)):
+                        with left_column:
+                            st.text(f"Slab {i+1}")
+                            if no_of_slabs ==1:
+                                max_txn_perc.append(st.text_input("Maximum number of transactions per month", value=monthly_txn_check, key = f"key{i+20}"))
+                            else:
+                                max_txn_perc.append(st.text_input("Maximum number of transactions per month",key = f"key{i+20}"))
+                        with right_column:
+                            base_perc.append(st.number_input("Percentage per transaction amount(in %)", key = f"key{i+50}"))
+                            base_perc_comp.append(st.number_input("Competitor Percentage per transaction amount(in %)", key = f"key{i+150}"))
+                else:
+                    st.error("Number of slabs can be from 1-5")
+
+                postpaid_base_perc_button = st.button("Calculate Price", key="postpaid base perc")
+
+                aasaan_column, comp_column = st.columns(2)
+                if postpaid_base_perc_button and aov_bperc:
+                    monthly_txn_bperc = max(max_txn_perc)
+                    est_revenue_bperc = est_yearly_revenue(int(monthly_txn_bperc), float(aov_bperc)) 
+                    incr_revenue_perc_bperc = incr_rev_perc(est_revenue_bperc)
+                    incr_revenue_bperc = incr_rev(est_revenue_bperc, incr_revenue_perc_bperc)
+
+                    postpaid_base_perc_obj = AasaanPostPaidBasePercCalculation(max_txn_perc, base_perc, base_perc_comp, aov_bperc, no_of_slabs)
+                    postpaid_baseperc_pricing = postpaid_base_perc_obj.aasaan_postpaid_base_perc()
+                    postpaid_baseperc_comp_pricing = postpaid_base_perc_obj.aasaan_postpaid_comp_base_perc()
+                    with aasaan_column:
+                        st.metric("Aasaan Yearly Cost", convert_to_indian_currency(postpaid_baseperc_pricing))
+                        st.metric("Yearly Incremental Revenue", convert_to_indian_currency(incr_revenue_bperc))
+                        st.metric("Months to breakeven", round(breakeven(postpaid_baseperc_pricing, incr_revenue_bperc),2))
+                    with comp_column:
+                        st.metric("Competitor", convert_to_indian_currency(postpaid_baseperc_comp_pricing))
+
+                        monthly_txn_bperc = max(max_txn_perc)
+
+                        #Competitor Function Values   
+                        if aov_bperc and monthly_txn_bperc:
+                            competitor_prices_bperc = comp_price_dict(monthly_txn_bperc, aov_bperc, selected_competitors)
+
+                        for key in competitor_prices_bperc.keys():
+                            st.metric(key, convert_to_indian_currency(competitor_prices_bperc[key])) 
+        else:
+            st.empty()
 
         
 
