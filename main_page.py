@@ -429,7 +429,7 @@ if country_dropdown == 'UAE':
         txn_nature = st.radio("Select the nature of the monthly transactions over the year", ["Constant", "Fluctuating"], key="txn_nature_key")
 
         if aov_check and monthly_txn_check:
-            priceModule,isTiered = pricingModelSelector(int(monthly_txn_check), float(aov_check),txn_nature)
+            priceModule,isTiered = UAEpricingModelSelector(int(monthly_txn_check), float(aov_check),txn_nature)
         else:
             priceModule = 0
 
