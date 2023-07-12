@@ -2,7 +2,7 @@ import streamlit as st
 from PIL import Image
 import pandas as pd
 
-st.set_page_config(page_title="Price Calculator1", page_icon=":tada:", layout="wide")
+st.set_page_config(page_title="Price Calculator", page_icon=":tada:", layout="wide")
 
 
 #Load Assets
@@ -196,9 +196,9 @@ with st.container():
 st.write('<style>.my-input { width: 300px; }</style>', unsafe_allow_html=True)
 
 #--Checkbox for UAE-- 
-st.subheader("Select the Merchant's country of operations ")
+st.subheader("Merchant's country of operations ")
 country =['India','UAE']
-country_dropdown = st.selectbox("Select Target Region", country)
+country_dropdown = st.selectbox("Select merchant's country of operation", country)
 
 if country_dropdown == 'India':
     #--Choose Competitor ---
