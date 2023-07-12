@@ -17,7 +17,7 @@ def convert_to_indian_currency(number):
 
 #UAE Format
 def convert_to_uae_currency(number):
-    return 'AED' + number
+    return 'AED' + str(number)
 
 
 #Estimated Yearly Revenue 
