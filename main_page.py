@@ -417,5 +417,45 @@ if country_dropdown == 'UAE':
 
         getPricingModel = st.button("Get Pricing Model", key="getPMButton")
 
+    #---Prepaid ---
+    with st.container():
+        st.write("---")
+        if priceModule == "Prepaid":
+                st.subheader("Prepaid Pricing Model")  
+
+                #Taking the inputs aov and txn details for comp. benchmarking
+                left_column, right_column = st.columns(2)
+                with left_column:
+                    aov = st.text_input("Avg. Order Value (in Rs.)", value=aov_check)
+                with right_column:
+                    monthly_txn = st.text_input("Avg. Transactions per Month", value = monthly_txn_check)
+
+                est_revenue_prepaid = est_yearly_revenue(int(monthly_txn), float(aov)) 
+                incr_revenue_perc_prepaid = incr_rev_perc(est_revenue_prepaid)
+                incr_revenue_prepaid = incr_rev(est_revenue_prepaid, incr_revenue_perc_prepaid) 
+
+
+                #Subscription Plan Dropdown 
+                subscription_plans_options = ['Quarterly', 'Half-yearly', 'Yearly']
+                selected_subscription_plan = st.selectbox("Select the Prepaid Subscription Type", subscription_plans_options, key='prepaid_sub_plan')
+                prepaid_button = st.button("Calculate Price")
+
+                #Competitor Function Values   
+                if aov and monthly_txn:
+                    competitor_prices = comp_price_dict(monthly_txn, aov,selected_competitors)
+                aasaan_column, comp_column = st.columns(2)
+                if prepaid_button:
+                    with aasaan_column:
+                        st.metric("Aasaan Yearly Cost",convert_to_indian_currency(aasaan_prepaid(selected_subscription_plan)))
+                        st.metric("Yearly Incremental Revenue", convert_to_indian_currency(incr_revenue_prepaid))
+                        st.metric("Months to breakeven", round(breakeven(aasaan_prepaid(selected_subscription_plan), incr_revenue_prepaid),2))
+                    with comp_column:
+                        for key in competitor_prices.keys():
+                            st.metric(key, convert_to_indian_currency(competitor_prices[key]))
+        else:
+            st.empty()
+
+
+
         
 
