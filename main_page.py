@@ -472,7 +472,7 @@ if country_dropdown == 'UAE':
 
                 if prepaid_button:
                     st.metric("Aasaan Yearly Cost",UAEaasaan_prepaid(selected_subscription_plan))
-                    #st.metric("Yearly Incremental Revenue", convert_to_indian_currency(incr_revenue_prepaid))
+                    st.metric("Yearly Incremental Revenue", incr_revenue_prepaid)
                     st.metric("Months to breakeven", round(breakeven(aasaan_prepaid(selected_subscription_plan), incr_revenue_prepaid),2))
                    
         else:
@@ -488,7 +488,7 @@ if country_dropdown == 'UAE':
             else:
                 st.write("Non-Tiered")
                 no_of_slabs = 1
-            aov_bprice = st.text_input("Avg. Order Value (in Rs.)", value=aov_check, key="AOV base price")
+            aov_bprice = st.text_input("Avg. Order Value (in AED)", value=aov_check, key="AOV base price")
             max_txn = []
             base_price=[]
             base_price_comp = []
@@ -503,8 +503,8 @@ if country_dropdown == 'UAE':
                             else:
                                 max_txn.append(st.text_input("Maximum number of transactions per month",key = f"key{i}"))
                         with right_column:
-                            base_price.append(st.number_input("Price per transaction(in Rs.)", key = f"key{i+10}"))
-                            base_price_comp.append(st.number_input("Competitor Price per transaction(in Rs.)", key = f"key{i+100}"))
+                            base_price.append(st.number_input("Price per transaction(in AED)", key = f"key{i+10}"))
+                            base_price_comp.append(st.number_input("Competitor Price per transaction(in AED)", key = f"key{i+100}"))
                 else:
                     st.error("Number of slabs can be from 1-5")
                 postpaid_base_price_button = st.button("Calculate Price", key="postpaid base price")
@@ -513,7 +513,7 @@ if country_dropdown == 'UAE':
                 if postpaid_base_price_button:
                     monthly_txn_bprice = max(max_txn)
                     est_revenue_bprice = est_yearly_revenue(int(monthly_txn_bprice), float(aov_bprice)) 
-                    incr_revenue_perc_bprice = incr_rev_perc(est_revenue_bprice)
+                    incr_revenue_perc_bprice = UAEincr_rev_perc(est_revenue_bprice)
                     incr_revenue_bprice = incr_rev(est_revenue_bprice, incr_revenue_perc_bprice)
 
                     postpaid_base_price_obj = AasaanPostPaidBasePriceCalculation(max_txn, base_price, base_price_comp, no_of_slabs)
@@ -521,20 +521,10 @@ if country_dropdown == 'UAE':
                     postpaid_baseprice_comp_pricing = postpaid_base_price_obj.aasaan_postpaid_base_price_comp()
                     with aasaan_column:
                         st.metric("Aasaan Yearly Cost", convert_to_indian_currency(postpaid_baseprice_pricing))
-                        st.metric("Yearly Incremental Revenue", convert_to_indian_currency(incr_revenue_bprice))
+                        st.metric("Yearly Incremental Revenue", incr_revenue_bprice)
                         st.metric("Months to breakeven", round(breakeven(postpaid_baseprice_pricing, incr_revenue_bprice),2))
                     with comp_column:
-                        st.metric("Competitor", convert_to_indian_currency(postpaid_baseprice_comp_pricing))
-
-
-                        #st.write(monthly_txn_bprice)
-                        #Competitor Function Values   
-                        if aov_bprice and monthly_txn_bprice:
-                            competitor_prices = comp_price_dict(monthly_txn_bprice, aov_bprice,selected_competitors)
-
-
-                        for key in competitor_prices.keys():
-                            st.metric(key, convert_to_indian_currency(competitor_prices[key]))
+                        st.metric("Competitor", postpaid_baseprice_comp_pricing)
         else:
             st.empty()
 
