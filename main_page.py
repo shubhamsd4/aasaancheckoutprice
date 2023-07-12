@@ -15,6 +15,10 @@ def convert_to_indian_currency(number):
     r = ",".join([s[x-2:x] for x in range(-3, -len(s), -2)][::-1] + [s[-3:]])
     return '₹' + "".join([r] + d)
 
+#UAE Format
+def convert_to_uae_currency(number):
+    return 'AED' + number
+
 
 #Estimated Yearly Revenue 
 def est_yearly_revenue(txn, AOV):
@@ -520,7 +524,7 @@ if country_dropdown == 'UAE':
                     postpaid_baseprice_pricing = postpaid_base_price_obj.aasaan_postpaid_base_price()
                     postpaid_baseprice_comp_pricing = postpaid_base_price_obj.aasaan_postpaid_base_price_comp()
                     with aasaan_column:
-                        st.metric("Aasaan Yearly Cost", convert_to_indian_currency(postpaid_baseprice_pricing))
+                        st.metric("Aasaan Yearly Cost", convert_to_uae_currency(postpaid_baseprice_pricing))
                         st.metric("Yearly Incremental Revenue", incr_revenue_bprice)
                         st.metric("Months to breakeven", round(breakeven(postpaid_baseprice_pricing, incr_revenue_bprice),2))
                     with comp_column:
